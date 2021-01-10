@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+  <script>
+    window.onload=function(){
+      document.body.style.backgroundImage=`url(${document.getElementById("img").src})`
+      document.body.style.backgroundPosition="fixed"
+      let img=document.getElementById("img")
+      
+      img.parentNode.removeChild(img)
+    }
+  </script>
+  
+</head>
+<body style="position: relative;background-attachment: fixed;background-repeat: no-repeat;background-position: center;">
+  <div class="main">
+    <center>
+      
+      <img src=<%= title %> alt="image" id="img" style="height: 100vh;width: 100vw;">
+      <a download=<%= user %> href=<%= title %>> download image </a>
+      
+      
+      
+    </center>  
+  </div>
+  
+  
+  
+  
+</body>
+</html>
