@@ -15,14 +15,14 @@ var app = express();
 app.use(express.static('/public'))
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header("Access-Control-Allow-Methods" , "GET,POST,PUT,DELETE,OPTIONS");
   res.header("Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
   req.header('Access-Control-Allow-Origin', '*');
  
   next();
-});
+});*/
 
 app.set('view engine', 'ejs');
 
