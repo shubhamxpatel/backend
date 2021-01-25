@@ -45,7 +45,8 @@
               window.location=`/addmovie`
            }
            else{
-             document.getElementById("warning").value=res.data;
+             console.log(res)
+             document.getElementById("warning").innerText=res.result;
            }
          })
       }
