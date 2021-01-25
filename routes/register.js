@@ -8,7 +8,7 @@ var binary=require('mongodb').Binary
 //var grid=require('gridfs-stream')
 
 //console.log(path.join(__dirname,'../public'))
-var conn = require("../public/javascripts/connect.js");
+var {conn} = require("../public/javascripts/connect.js");
 const { Z_BINARY } = require('zlib');
 const { deleteuser } = require('./users.js');
 var ans=""
@@ -84,10 +84,14 @@ async function fun1(req,res){
     })
 
 }
+router.get('/addmovie',(req,res)=>{
+    res.render('addmovie')
+})
 router.get('/:image',(req,res)=>{
     console.log(req.params.image)
 
    
     fun1(req,res)
 })
+
 module.exports = router;

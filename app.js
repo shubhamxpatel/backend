@@ -8,6 +8,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');
+var adminRouter=require('./routes/admin')
+var movieRouter=require('./routes/movie')
 var cors = require('cors')
 
 
@@ -23,6 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static('public'));
+
 //app.use(express.static('public/images'));
 
 //app.use(express.static('../movie_suggetion/public'));
@@ -33,7 +36,8 @@ app.use('/users', usersRouter);
 app.use('/ram',router)
 app.use('/login',loginRouter)
 app.use('/register',registerRouter)
-
+app.use('/admin',adminRouter)
+app.use('/movie',movieRouter)
 router.get('/',(req,res,next)=>{
   res.sendFile("public/help.html",{root:path.join(__dirname)})
 })

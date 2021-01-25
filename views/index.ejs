@@ -17,44 +17,76 @@
     <link rel="stylesheet" href="stylesheets/style.css">
 
     <title>Login #2</title>
+    <script>
+      window.onload=function()
+      {
+        //login();
+      }
+      async function login(e){
+        e.preventDefault();
+        let admin=document.getElementById("username").value;
+        let pass=document.getElementById("password").value;
+        console.log(admin,pass)
+        let response=await fetch('/admin/login',{
+            method:"POST",
+            body:JSON.stringify({
+                
+                "admin":admin,
+                "pass":pass
+            }),
+            headers:{
+                "content-type":"application/json; charset=UTF-8"
+            }
+        })
+         await response.json().then((res)=>{
+           if(res.id)
+           {
+              localStorage.setItem("admin_id",res.id)
+              window.location=`/addmovie`
+           }
+           else{
+             document.getElementById().value=res.data;
+           }
+         })
+      }
+    </script>
   </head>
   <body>
   
 
-  <div class="d-lg-flex half">
-    <div class="bg order-1 order-md-2" style="background-image: url('images/bg_1.jpg');"></div>
-    <div class="contents order-2 order-md-1">
-
+  
+    <div class="bg order-1 order-md-2" style="background-image: url('images/bg_1.jpg'); width: 100vw; height: 100vh;  background-repeat: no-repeat;background-attachment: fixed;  background-position: center;">
       <div class="container">
-        <div class="row align-items-center justify-content-center">
-          <div class="col-md-7">
-            <h3>Admin <strong>Login</strong></h3>
+        <div class="row justify-content-center">
+          <div class="col-md-7" style="box-shadow: 0 0 15px 5px black ;margin-top: 50%; transform: translateY(-50%);">
+            <h1 class="text-danger">Admin <strong>Login</strong></h1>
             <!-- <p class="mb-4">Lorem ipsum dolor sit amet elit. Sapiente sit aut eos consectetur adipisicing.</p> -->
-            <form>
+            <div>
               <div class="form-group first">
                 <label for="username">Username</label>
-                <input type="text" class="form-control" placeholder="your-email@gmail.com" id="username" required>
+                <input type="text" class="form-control" placeholder="your-email@gmail.com" id="username" name="username" required>
               </div>
               <div class="form-group last mb-3">
                 <label for="password">Password</label>
-                <input type="password" class="form-control" placeholder="Your Password" id="password" required>
+                <input type="password" class="form-control" placeholder="Your Password" id="password" name="password" required>
               </div>
+              <center>
+                <button class="btn btn-primary" onclick="login(event)">Submit</button>
+              </center>
               
-
-
-              <input type="submit" value="Log In" class="btn btn-block btn-primary" onsubmit="login()">
-
-            </form>
+            </div>
             <div class="mt-2">
-              <p id="warning" style="color: blanchedalmond; background-color: brown;">warning: </p>
+              <p id="warning" class="p-1" style="color: blanchedalmond; background-color: brown;">warning: <%= msg %></p>
             </div>
           </div>
         </div>
       </div>
     </div>
+    </div>
+    
 
     
-  </div>
+  
     
     
 
