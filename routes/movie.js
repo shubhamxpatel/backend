@@ -3,7 +3,8 @@ var express = require('express');
 var router = express.Router();
 var path = require('path')
 var mongodb = require('mongodb');
-var conn=require('../public/javascripts/connect.js')
+var conn=require('../public/javascripts/connect.js');
+const { response } = require('express');
 var actorschema=new mongoose.Schema({
     name:{
         type:String,
@@ -103,6 +104,16 @@ router.post('/',async (req,res,next)=>{
         res.send({"result":"unable to add movie"})    
     })
     
+})
+router.get('/:name',async (req,response,next)=>{
+    await moviemodel.findOne({movie_name:req.params.name},{_id:0})
+    .then(res=>{
+        console.log(res)
+        response.send(res);
+    })
+    .catch(err=>{
+        response.send(err)
+    })
 })
 router.post('/addactor',async (req,res,next)=>{
     let actor=new actormodel({name:req.body.name.toLowerCase(),img_url:req.body.img_url,wiki_link:req.body.wiki})
