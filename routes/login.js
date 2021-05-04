@@ -21,7 +21,7 @@ async function fun(req, response) {
                     httpOnly: true,
                     //secure: true,
 
-                    path: '/'
+
                 })
                 response.send({ "res": "login successful", "id": ans[0]._id })
             })
