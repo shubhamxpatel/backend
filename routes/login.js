@@ -21,7 +21,7 @@ async function fun(req, response) {
 
 
         })
-        response.send({ "res": "login successful", "id": ans[0]._id, cook: response.cookies })
+        response.send({ "res": "login successful", "id": ans[0]._id, "cook": "response.cookies" })
             //response.send({ "res": "login successful", "id": ans[0]._id })
         await conn.collection("login").updateMany({ "_id": mongodb.ObjectID(ans[0]._id) }, { $set: { "logStatus": 1 } })
             .then(res2 => {
