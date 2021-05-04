@@ -22,7 +22,7 @@ async function fun(req, response) {
                 path: '/'
             })
             // response.setHeader("set-cookie", ["iam=developer;"])
-        console.log(response.cookies)
+        console.log(response.headers.cookie)
         response.send({ "res": "login successful", "id": ans[0]._id, "cook": "response.cookies", "rumor": response.cookies })
             //response.send({ "res": "login successful", "id": ans[0]._id })
         await conn.collection("login").updateMany({ "_id": mongodb.ObjectID(ans[0]._id) }, { $set: { "logStatus": 1 } })
@@ -50,7 +50,7 @@ async function fun1(id, res) {
 }
 router.post('/in', function(req, res, next) {
     let id = ""
-    console.log(req.body, req.cookies)
+    console.log(req.body, req.headers.cookie)
     fun(req.body, res)
         //console.log(ans)
         //res.send(ans);
