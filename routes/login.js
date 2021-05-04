@@ -30,9 +30,8 @@ async function fun(req, response) {
                 response.cookie('name', "wron credential", {
                     expires: new Date(Date.now() + 300000),
                     httpOnly: true,
-                    domain: 'hexanebackend.herokuapp.com',
-                    path: '/'
-                        //secure: true,
+                    sameSite: 'none',
+                    secure: true,
 
 
                 })
