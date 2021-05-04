@@ -4,6 +4,7 @@ var router = express.Router();
 var path = require('path')
 var mongodb = require('mongodb');
 var conn=require('../public/javascripts/connect.js');
+
 const { response } = require('express');
 var actorschema=new mongoose.Schema({
     name:{
@@ -106,7 +107,7 @@ router.post('/',async (req,res,next)=>{
     
 })
 router.get('/:name',async (req,response,next)=>{
-    await moviemodel.findOne({movie_name:req.params.name},{_id:0})
+    await moviemodel.findOne({movie_name:{$regex:new RegExp(req.params.name,'i')}},{_id:0})
     .then(res=>{
         console.log(res)
         response.send(res);
@@ -117,7 +118,7 @@ router.get('/:name',async (req,response,next)=>{
 })
 router.post('/addactor',async (req,res,next)=>{
     let actor=new actormodel({name:req.body.name.toLowerCase(),img_url:req.body.img_url,wiki_link:req.body.wiki})
-    await actor.save().then(response=>{
+    await conn.collection("actors").update({name:req.body.name.toLowerCase()},{name:req.body.name.toLowerCase(),img_url:req.body.img_url,wiki_link:req.body.wiki},{upsert:true}).then(response=>{
         console.log(response)
         res.send({"error":"no_errors"})
     })

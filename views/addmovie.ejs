@@ -7,95 +7,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
     <style>
-        *{
+        * {
             border-radius: 20px;
             font: 1em sans-serif;
         }
-        
     </style>
 
     <title>Document</title>
     <script>
-
         var movie_data = {}
-        async function validate(){
-            let response= await fetch(`/admin/user/${localStorage.getItem("admin_id")}`)
-            await response.json().then(res=>{
-                if(res.correct)
-                {   document.body.style.visibility="visible"
-                    document.getElementById("user").innerText=res.user_name
-                    sessionStorage.setItem("user",res.user_name)
-                }
-                else
-                {
-                    window.location='/'
-                }
-            })
-            .catch(err=>{
-                window.location='/'
-            })
+        async function validate() {
+            let response = await fetch(`/admin/user/${localStorage.getItem("admin_id")}`)
+            await response.json().then(res => {
+                    if (res.correct) {
+                        document.body.style.visibility = "visible"
+                        document.getElementById("user").innerText = res.user_name
+                        sessionStorage.setItem("user", res.user_name)
+                    } else {
+                        window.location = '/'
+                    }
+                })
+                .catch(err => {
+                    window.location = '/'
+                })
         }
-        function convert(s)
-        {
-            
-                console.log(s.split(" ").join("_"))
-                return s.split(" ").join("_")
-            
+
+        function convert(s) {
+
+            console.log(s.split(" ").join("_"))
+            return s.split(" ").join("_")
+
         }
-        
-            
-            
-        window.onload = function () {
-            
-            let id=localStorage.getItem("admin_id")
+
+
+
+        window.onload = function() {
+
+            let id = localStorage.getItem("admin_id")
             console.log(id)
-            document.body.style.visibility="hidden"
+            document.body.style.visibility = "hidden"
             validate()
-            
+
             if (localStorage.getItem("data")) {
                 movie_data = JSON.parse(localStorage.getItem("data"))
             }
-            if(movie_data.actor===undefined)
-            {
-                console.log(movie_data.actor,"not present")
+            if (movie_data.actor === undefined) {
+                console.log(movie_data.actor, "not present")
                 movie_data.actor = {}
             }
-            console.log(movie_data.actor,"present")
+            console.log(movie_data.actor, "present")
             console.log(movie_data)
-            movie_data.admin=sessionStorage.getItem("user")
+            movie_data.admin = sessionStorage.getItem("user")
             for (let key in movie_data) {
                 console.log(movie_data[key])
                 if (movie_data[key] !== undefined) {
                     if (document.getElementById(key)) {
                         document.getElementById(key).value = movie_data[key]
                     }
-                    if(key==="poster_url")
-                    {
+                    if (key === "poster_url") {
                         console.log("hello")
-                if (document.getElementById("poster_url").parentNode.nextSibling.id === "img") {
-                    document.getElementById("poster_url").parentNode.parentNode.removeChild(document.getElementById("poster_url").parentNode.nextSibling)
-                }
-                let col = document.createElement("DIV")
-                col.id = "img"
-                col.classList.add("col-md-6", "m-auto")
-                let div = document.createElement("DIV")
-                div.classList.add("embed-responsive", "embed-responsive-1by1", "col-12", "p-1", "m-auto")
-                let iframe = document.createElement("img");
-                iframe.classList.add("col-xs-6", "embed-responsive-item", "p-1")
-                iframe.style.width = "100%"
-                iframe.src = document.getElementById("poster_url").value
-                if (document.getElementById("poster_url").parentNode.nextSibling) {
-                    document.getElementById("poster_url").parentNode.parentNode.insertBefore(col, document.getElementById("poster_url").parentNode.nextSibling)
-                }
-                else {
-                    document.getElementById("poster_url").parentNode.parentNode.appendChild(col)
-                }
-                col.appendChild(div)
-                div.appendChild(iframe)
+                        if (document.getElementById("poster_url").parentNode.nextSibling.id === "img") {
+                            document.getElementById("poster_url").parentNode.parentNode.removeChild(document.getElementById("poster_url").parentNode.nextSibling)
+                        }
+                        let col = document.createElement("DIV")
+                        col.id = "img"
+                        col.classList.add("col-md-6", "m-auto")
+                        let div = document.createElement("DIV")
+                        div.classList.add("embed-responsive", "embed-responsive-1by1", "col-12", "p-1", "m-auto")
+                        let iframe = document.createElement("img");
+                        iframe.classList.add("col-xs-6", "embed-responsive-item", "p-1")
+                        iframe.style.width = "100%"
+                        iframe.src = document.getElementById("poster_url").value
+                        if (document.getElementById("poster_url").parentNode.nextSibling) {
+                            document.getElementById("poster_url").parentNode.parentNode.insertBefore(col, document.getElementById("poster_url").parentNode.nextSibling)
+                        } else {
+                            document.getElementById("poster_url").parentNode.parentNode.appendChild(col)
+                        }
+                        col.appendChild(div)
+                        div.appendChild(iframe)
 
 
-                
-            
+
+
                     }
                     if (key === "movie_trailer") {
                         let col = document.createElement("DIV")
@@ -111,18 +104,17 @@
                         iframe.src = document.getElementById("movie_trailer").value
                         if (document.getElementById("movie_trailer").parentNode.nextSibling) {
                             document.getElementById("movie_trailer").parentNode.parentNode.insertBefore(col, document.getElementById("movie_trailer").parentNode.nextSibling)
-                        }
-                        else {
+                        } else {
                             document.getElementById("movie_trailer").parentNode.parentNode.appendChild(col)
                         }
                         col.appendChild(div)
                         div.appendChild(iframe)
                     }
                     if (key === "actor") {
-                        
+
                         let inner = "";
                         for (let key1 in movie_data["actor"]) {
-                            console.log(convert(movie_data["actor"][key1].name),movie_data["actor"][key1].name)
+                            console.log(convert(movie_data["actor"][key1].name), movie_data["actor"][key1].name)
                             inner += `<div class="row p-0 m-1" style="" id=${convert(movie_data["actor"][key1].name)}>
                                 <div class="embed-responsive embed-responsive-1by1 p-1 col-5 m-auto"><img class="embed-responsive-item" src=${movie_data["actor"][key1].img_url} alt=""></div>
                         <div class="card-body col-6">
@@ -139,22 +131,24 @@
                 }
             }
         }
-        
+
         function deletestorage() {
             localStorage.removeItem("data")
             window.location.reload()
 
         }
-        var interval=setInterval(() => {
-            
+        var interval = setInterval(() => {
+
             localStorage.setItem("data", JSON.stringify(movie_data))
-            //console.log(localStorage.getItem("data"))
-            //console.log(new Date().getTime())
+                //console.log(localStorage.getItem("data"))
+                //console.log(new Date().getTime())
         }, 3000);
+
         function addstory() {
             movie_data.story = document.getElementsByName("story")[0].value
             console.log(movie_data)
         }
+
         function deleteactor(e) {
             let actor_name = (e.target.parentNode.childNodes[1].innerText)
             e.target.parentNode.parentNode.parentNode.removeChild(e.target.parentNode.parentNode)
@@ -162,11 +156,13 @@
             console.log(movie_data)
 
         }
-        function setgener(){
-            let gen=document.getElementsByName("gener")[0]
-            movie_data.gener=gen[gen.selectedIndex].value
+
+        function setgener() {
+            let gen = document.getElementsByName("gener")[0]
+            movie_data.gener = gen[gen.selectedIndex].value
             console.log(movie_data)
         }
+
         function addactor() {
             if (!document.getElementById(convert(document.getElementById("actor_name").value)) && document.getElementById("img_url").value !== "" && document.getElementById("actor_name").value !== "") {
                 movie_data.actor[document.getElementById("actor_name").value] = {
@@ -190,6 +186,7 @@
                 document.getElementById("wiki").value = ""
             }
         }
+
         function addfield(e) {
             console.log(e.target.value)
             if (e.target.name === "movie_trailer") {
@@ -209,8 +206,7 @@
                 iframe.src = e.target.value
                 if (e.target.parentNode.nextSibling) {
                     e.target.parentNode.parentNode.insertBefore(col, e.target.parentNode.nextSibling)
-                }
-                else {
+                } else {
                     e.target.parentNode.parentNode.appendChild(col)
                 }
                 col.appendChild(div)
@@ -219,8 +215,8 @@
 
 
             }
-            if(e.target.name === "poster_url")
-            {console.log("hello")
+            if (e.target.name === "poster_url") {
+                console.log("hello")
                 if (e.target.parentNode.nextSibling.id === "img") {
                     e.target.parentNode.parentNode.removeChild(e.target.parentNode.nextSibling)
                 }
@@ -235,15 +231,14 @@
                 iframe.src = e.target.value
                 if (e.target.parentNode.nextSibling) {
                     e.target.parentNode.parentNode.insertBefore(col, e.target.parentNode.nextSibling)
-                }
-                else {
+                } else {
                     e.target.parentNode.parentNode.appendChild(col)
                 }
                 col.appendChild(div)
                 div.appendChild(iframe)
 
 
-                
+
             }
             movie_data[e.target.name] = e.target.value;
             console.log(movie_data)
@@ -257,42 +252,33 @@
             <div class="row p-3">
                 <div class="col-12">
                     <u><h2 id="user" class="p-2 text-center text-dark shadow-lg"></h2></u>
-                    
+
                 </div>
                 <div class="col-12">
                     <hr style="border: 2px solid white;">
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-12 ">
-                    <input type="text" name="movie_name" id="movie_name" class="p-1 m-1 text-center overflow-scroll"
-                        placeholder="enter movie name" onchange="addfield(event)" style="width:98%">
+                    <input type="text" name="movie_name" id="movie_name" class="p-1 m-1 text-center overflow-scroll" placeholder="enter movie name" onchange="addfield(event)" style="width:98%">
                 </div>
                 <div class="col-12">
-                    <input type="text" name="movie_trailer" id="movie_trailer"
-                        class="p-1 m-1 text-center overflow-scroll" placeholder="movie trailer link"
-                        onchange="addfield(event)" style="width: 98%;">
+                    <input type="text" name="movie_trailer" id="movie_trailer" class="p-1 m-1 text-center overflow-scroll" placeholder="movie trailer link" onchange="addfield(event)" style="width: 98%;">
                 </div>
                 <div class="col-12">
-                    <input type="text" name="poster_url" id="poster_url"
-                        class="p-1 m-1 text-center overflow-scroll" placeholder="poster url"
-                        onchange="addfield(event)" style="width: 98%;">
+                    <input type="text" name="poster_url" id="poster_url" class="p-1 m-1 text-center overflow-scroll" placeholder="poster url" onchange="addfield(event)" style="width: 98%;">
                 </div>
                 <div class="col-11 m-auto">
                     <div class="row p-2" style="border: 2px solid black;">
                         <div class="col-sm-4">
-                            <input type="text" name="actor_name" id="actor_name" onchange="search(event)"
-                                class="p-1 m-1 text-center overflow-scroll" placeholder="Actor Name"
-                                style="width: 98%;">
+                            <input type="text" name="actor_name" id="actor_name" onchange="search(event)" class="p-1 m-1 text-center overflow-scroll" placeholder="Actor Name" style="width: 98%;">
                         </div>
                         <div class="col-sm-8">
-                            <input type="text" name="img_url" id="img_url" class="p-1 m-1 text-center overflow-scroll"
-                                placeholder="Actor Image URL" style="width: 98%;">
+                            <input type="text" name="img_url" id="img_url" class="p-1 m-1 text-center overflow-scroll" placeholder="Actor Image URL" style="width: 98%;">
                         </div>
                         <div class="col-12">
-                            <input type="text" name="wiki" id="wiki" class="p-1 m-1 text-center overflow-scroll"
-                                placeholder="Actor Wikipedia page link" style="width: 98%;">
+                            <input type="text" name="wiki" id="wiki" class="p-1 m-1 text-center overflow-scroll" placeholder="Actor Wikipedia page link" style="width: 98%;">
                         </div>
                         <div class="col-12 mt-1">
                             <center>
@@ -313,8 +299,7 @@
                 </div>
                 <div class="col-12 p-2 mt-1">
                     <div class="col-11 p-1 m-auto" style="border: 2px solid white;">
-                        <textarea name="story" placeholder="write story of movie" id="story" class="p-1"
-                            style="width: 92%; margin-left: 4%; margin-right: 4%;height: 300px;"></textarea>
+                        <textarea name="story" placeholder="write story of movie" id="story" class="p-1" style="width: 92%; margin-left: 4%; margin-right: 4%;height: 300px;"></textarea>
                         <div class="col-12">
                             <div class="m-auto" style="width: fit-content;">
                                 <button class="btn-md btn-danger" onclick="addstory()">add story</button>
@@ -324,19 +309,13 @@
                     </div>
                 </div>
                 <div class="col-12">
-                    <input type="text" name="director_name" id="director_name"
-                        class="p-1 m-1 text-center overflow-scroll" placeholder="enter director name"
-                        onchange="addfield(event)" style="width:98%">
+                    <input type="text" name="director_name" id="director_name" class="p-1 m-1 text-center overflow-scroll" placeholder="enter director name" onchange="addfield(event)" style="width:98%">
                 </div>
                 <div class="col-12">
-                    <input type="text" name="language" id="language"
-                        class="p-1 m-1 text-center overflow-scroll" placeholder="enter language separated by ','"
-                        onchange="addfield(event)" style="width:98%">
+                    <input type="text" name="language" id="language" class="p-1 m-1 text-center overflow-scroll" placeholder="enter language separated by ','" onchange="addfield(event)" style="width:98%">
                 </div>
                 <div class="col-12">
-                    <input type="text" name="gener" id="gener"
-                        class="p-1 m-1 text-center overflow-scroll" placeholder="enter gener separated by ','"
-                        onchange="addfield(event)" style="width:98%">
+                    <input type="text" name="gener" id="gener" class="p-1 m-1 text-center overflow-scroll" placeholder="enter gener separated by ','" onchange="addfield(event)" style="width:98%">
                 </div>
                 <div class="col-12 d-flex justify-content-center mt-2">
                     <div style="width: fit-content;border: 1px solid white;" class="mr-1 p-1">
@@ -351,8 +330,7 @@
                         <strong>Running Time</strong>
                     </div>
                     <div style="width: fit-content; padding: 2px;">
-                        <input class="text-center" type="text" name="run_time" id="run_time" placeholder="running time in minutes"
-                            onchange="addfield(event)">
+                        <input class="text-center" type="text" name="run_time" id="run_time" placeholder="running time in minutes" onchange="addfield(event)">
                     </div>
                 </div>
                 <!-- <div class="col-12 d-flex justify-content-center mt-2">
@@ -375,7 +353,7 @@
                     <hr style="border: 1px solid white;">
                 </div>
                 <div class="m-auto">
-                    <button class="btn btn-danger"  onclick="submit()">Submit</button>
+                    <button class="btn btn-danger" onclick="submit()">Submit</button>
                 </div>
                 <div class="m-auto">
                     <button class="btn btn-danger" onclick="logout()">LogOut</button>
@@ -383,7 +361,7 @@
                 <div class="m-auto">
                     <button class="btn btn-danger" onclick="deletestorage()">Clear Data</button>
                 </div>
-                
+
 
 
             </div>
@@ -393,108 +371,103 @@
 
 </body>
 <script>
-    async function search(e)
-    {
-        if(!document.getElementById(convert(document.getElementById("actor_name").value))){
-        let actor_name=e.target.value
-        let response=await fetch(`/movie/actor/${actor_name}`,{
-            method:"GET",
-            headers:{
-                "content-type":"application/json; charset=UTF-8"
-            }
-        })
-        await response.json().then((res)=>{
-            if(res.img_url)
-            {
-                document.getElementById("img_url").value=res.img_url
-                document.getElementById("wiki").value=res.wiki_link
-                addactor()
-            }
-            
-        })
-        .catch(err=>{
-            throw err
-        })
+    async function search(e) {
+        if (!document.getElementById(convert(document.getElementById("actor_name").value))) {
+            let actor_name = e.target.value
+            let response = await fetch(`/movie/actor/${actor_name}`, {
+                method: "GET",
+                headers: {
+                    "content-type": "application/json; charset=UTF-8"
+                }
+            })
+            await response.json().then((res) => {
+                    if (res && res.result!=="actor not in database") {
+                        document.getElementById("img_url").value = res.img_url
+                        document.getElementById("wiki").value = res.wiki_link
+                        addactor()
+                    }
+
+                })
+                .catch(err => {
+                    throw err
+                })
+        }
     }
-    }
-    function logout(){
+
+    function logout() {
         clearInterval(interval);
         localStorage.clear()
         localStorage.removeItem("data")
         sessionStorage.clear()
-        window.location='/'
+        window.location = '/'
 
     }
-    async function postactor()
-    {
+    async function postactor() {
         //if(!document.getElementById(convert(document.getElementById("actor_name").value))){
-        let response = await fetch('/movie/addactor',{
-            method:"POST",
-            body:JSON.stringify({
-                "name":document.getElementById("actor_name").value,
-                "img_url":document.getElementById("img_url").value,
-                "wiki":document.getElementById("wiki").value
+        let response = await fetch('/movie/addactor', {
+            method: "POST",
+            body: JSON.stringify({
+                "name": document.getElementById("actor_name").value,
+                "img_url": document.getElementById("img_url").value,
+                "wiki": document.getElementById("wiki").value
             }),
-            headers:{
-                "content-type":"application/json; charset=UTF-8"
+            headers: {
+                "content-type": "application/json; charset=UTF-8"
             }
         })
-        await response.json().then(res=>{
-            console.log(res)
-            if(res.error==="no_errors")
-            {
-                addactor()
-            }
-            
-        }).catch(err=>{ 
-            console.log("unable to add actor")
-        })
-    //}
+        await response.json().then(res => {
+                console.log(res)
+                if (res.error === "no_errors") {
+                    addactor()
+                }
+
+            }).catch(err => {
+                console.log("unable to add actor")
+            })
+            //}
     }
-    async function submit()
-    {
-        movie_data.actors=[]
-        for(let key in movie_data.actor)
-        {
+    async function submit() {
+        movie_data.admin = "shubham patel"
+        movie_data.actors = []
+        for (let key in movie_data.actor) {
 
             movie_data.actors.push(key.toLowerCase())
         }
-        if(movie_data.movie_lang){
-        movie_data.movie_lang=movie_data.language.split(",")
-        for(let i=0;i<movie_data.movie_lang.length;i++)
-        {
-            movie_data.movie_lang[i]=movie_data.movie_lang[i].trim().toLowerCase()
+        if (movie_data.movie_lang) {
+            movie_data.movie_lang = movie_data.language.split(",")
+            for (let i = 0; i < movie_data.movie_lang.length; i++) {
+                movie_data.movie_lang[i] = movie_data.movie_lang[i].trim().toLowerCase()
+            }
         }
-    }
-    if(movie_data.movie_gener){
-        movie_data.movie_gener=movie_data.gener.split(",")
-        for(let i=0;i<movie_data.movie_gener.length;i++)
-        {
-            movie_data.movie_gener[i]=movie_data.movie_gener[i].trim().toLowerCase()
+        if (movie_data.movie_gener) {
+            movie_data.movie_gener = movie_data.gener.split(",")
+            for (let i = 0; i < movie_data.movie_gener.length; i++) {
+                movie_data.movie_gener[i] = movie_data.movie_gener[i].trim().toLowerCase()
+            }
         }
-    }
         console.log(movie_data.actors)
-        let movie=movie_data
-        
+        let movie = movie_data
+
         //movie.added_by=sessionStorage.getItem("user")
         console.log(movie)
-        let response=await fetch('/movie',{
-            method:'POST',
-            body:JSON.stringify({"movie_data":movie}),
-            headers:{
-                "content-type":"application/json; charset=utf-8"
+        let response = await fetch('/movie', {
+            method: 'POST',
+            body: JSON.stringify({
+                "movie_data": movie
+            }),
+            headers: {
+                "content-type": "application/json; charset=utf-8"
             }
         })
-        await response.json().then((res)=>{
-            console.log(res.result)
-            if(res.result==="movie added")
-            {
-                deletestorage()
-            }
-        })
-        .catch(err=>{
-            throw err
-        })
+        await response.json().then((res) => {
+                console.log(res.result)
+                if (res.result === "movie added") {
+                    deletestorage()
+                }
+            })
+            .catch(err => {
+                throw err
+            })
     }
 </script>
 
