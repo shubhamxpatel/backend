@@ -19,6 +19,7 @@ async function fun(req, response) {
                 response.cookie('name', ans[0]._id, {
                     expires: new Date(Date.now() + 300000),
                     httpOnly: true,
+                    // domain:'.github.com',
                     //secure: true,
 
 
@@ -29,7 +30,8 @@ async function fun(req, response) {
                 response.cookie('name', "wron credential", {
                     expires: new Date(Date.now() + 300000),
                     httpOnly: true,
-                    //secure: true,
+                    domain: 'shubhamxpatel.github.io'
+                        //secure: true,
 
 
                 })
