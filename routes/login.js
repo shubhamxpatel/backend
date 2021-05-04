@@ -13,7 +13,7 @@ async function fun(req, response) {
     ans = await cursor.toArray()
     if (ans.length > 0) {
         console.log(ans)
-        res.cookie('auth_token', "token", {
+        response.cookie('auth_token', "token", {
             expires: new Date(Date.now() + 300000),
             httpOnly: true,
             //secure: true,
