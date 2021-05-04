@@ -13,23 +13,23 @@ async function fun(req, response) {
     ans = await cursor.toArray()
     if (ans.length > 0) {
         console.log(ans)
-            // response.cookie('auth_token', "token", {
-            //     expires: new Date(Date.now() + 300000),
-            //     httpOnly: true,
-            //     //secure: true,
+        response.cookie('auth_token', "token", {
+                expires: new Date(Date.now() + 300000),
+                httpOnly: true,
+                //secure: true,
 
-        //     path: '/'
-        // })
-        response.setHeader("set-cookie", ["iam=developer;"])
+                path: '/'
+            })
+            // response.setHeader("set-cookie", ["iam=developer;"])
         console.log(response.cookies)
         response.send({ "res": "login successful", "id": ans[0]._id, "cook": "response.cookies", "rumor": response.cookies })
             //response.send({ "res": "login successful", "id": ans[0]._id })
         await conn.collection("login").updateMany({ "_id": mongodb.ObjectID(ans[0]._id) }, { $set: { "logStatus": 1 } })
             .then(res2 => {
-                console.log(res2)
+                // console.log(res2)
             })
             .catch(err => {
-                console.log(err)
+                // console.log(err)
             })
 
     } else {
