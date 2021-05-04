@@ -26,6 +26,13 @@ async function fun(req, response) {
                 response.send({ "res": "login successful", "id": ans[0]._id })
             })
             .catch(err => {
+                response.cookie('name', "wron credential", {
+                    expires: new Date(Date.now() + 300000),
+                    httpOnly: true,
+                    //secure: true,
+
+
+                })
                 response.send({ "res": "login unsuccessful" })
             })
 
