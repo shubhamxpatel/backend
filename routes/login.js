@@ -13,13 +13,12 @@ async function fun(req, response) {
     ans = await cursor.toArray()
     if (ans.length > 0) {
         console.log(ans)
-        response.cookie('name', ans[0]._id, {
+        res.cookie('auth_token', "token", {
             expires: new Date(Date.now() + 300000),
             httpOnly: true,
-            // domain:'.github.com',
             //secure: true,
 
-
+            path: '/'
         })
         console.log(response.cookies)
         response.send({ "res": "login successful", "id": ans[0]._id, "cook": "response.cookies", "rumor": response.cookies })
