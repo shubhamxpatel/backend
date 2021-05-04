@@ -13,29 +13,22 @@ async function fun(req, response) {
     ans = await cursor.toArray()
     if (ans.length > 0) {
         console.log(ans)
+        response.cookie('name', ans[0]._id, {
+            expires: new Date(Date.now() + 300000),
+            httpOnly: true,
+            // domain:'.github.com',
+            //secure: true,
+
+
+        })
         response.send({ "res": "login successful", "id": ans[0]._id })
+            //response.send({ "res": "login successful", "id": ans[0]._id })
         await conn.collection("login").updateMany({ "_id": mongodb.ObjectID(ans[0]._id) }, { $set: { "logStatus": 1 } })
             .then(res2 => {
-                response.cookie('name', ans[0]._id, {
-                    expires: new Date(Date.now() + 300000),
-                    httpOnly: true,
-                    // domain:'.github.com',
-                    //secure: true,
-
-
-                })
-                response.send({ "res": "login successful", "id": ans[0]._id })
+                console.log(res2)
             })
             .catch(err => {
-                response.cookie('name', "wron credential", {
-                    expires: new Date(Date.now() + 300000),
-                    httpOnly: true,
-                    sameSite: 'none',
-                    secure: true,
-
-
-                })
-                response.send({ "res": "login unsuccessful" })
+                console.log(err)
             })
 
     } else {
