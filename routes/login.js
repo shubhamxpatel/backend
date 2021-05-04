@@ -13,11 +13,12 @@ async function fun(req, response) {
     ans = await cursor.toArray()
     if (ans.length > 0) {
         console.log(ans)
+
         response.cookie('auth_token', "token", {
                 expires: new Date(Date.now() + 300000),
                 httpOnly: true,
                 //secure: true,
-                domain = 'hexanebackend.herokuapp.com',
+                domain: 'hexanebackend.herokuapp.com',
                 path: '/'
             })
             // response.setHeader("set-cookie", ["iam=developer;"])
@@ -49,7 +50,7 @@ async function fun1(id, res) {
 }
 router.post('/in', function(req, res, next) {
     let id = ""
-    console.log(req.body)
+    console.log(req.body, req.cookies)
     fun(req.body, res)
         //console.log(ans)
         //res.send(ans);
