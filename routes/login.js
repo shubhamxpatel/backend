@@ -17,7 +17,7 @@ async function fun(req, response) {
                 expires: new Date(Date.now() + 300000),
                 httpOnly: true,
                 //secure: true,
-
+                domain = 'hexanebackend.herokuapp.com',
                 path: '/'
             })
             // response.setHeader("set-cookie", ["iam=developer;"])
