@@ -3,140 +3,142 @@ var express = require('express');
 var router = express.Router();
 var path = require('path')
 var mongodb = require('mongodb');
-var conn=require('../public/javascripts/connect.js');
+var conn = require('../public/javascripts/connect.js');
 
 const { response } = require('express');
-var actorschema=new mongoose.Schema({
-    name:{
-        type:String,
-        required:[true,'actor name is empty'],
-        unique:true
+var actorschema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: [true, 'actor name is empty'],
+        unique: true
     },
-    img_url:{
-        type:String,
-        required:[true,'image url is empty'],
-        unique:true
+    img_url: {
+        type: String,
+        required: [true, 'image url is empty'],
+        unique: true
     },
-    wiki_link:{
-        type:String,
-        required:[true,'wikipedia link is empty'],
-        unique:true
+    wiki_link: {
+        type: String,
+        required: [true, 'wikipedia link is empty'],
+        unique: true
     },
 })
-let actormodel=new mongoose.model("actor",actorschema)
-var movieschema=new mongoose.Schema({
-    movie_name:{
-        type:String,
-        required:[true,'name is required field'],
-        unique:[true,'name field should be unique']
+let actormodel = new mongoose.model("actor", actorschema)
+var movieschema = new mongoose.Schema({
+    movie_name: {
+        type: String,
+        required: [true, 'name is required field'],
+        unique: [true, 'name field should be unique']
     },
-    movie_trailer:{
-        type:String,
-        required:[true,'movie_trailer is required field'],
-        unique:[true,'movie_trailer field should be unique']
+    movie_trailer: {
+        type: String,
+        required: [true, 'movie_trailer is required field'],
+        unique: [true, 'movie_trailer field should be unique']
     },
-    poster_url:{
-        type:String,
-        required:[true,'poster_url fieldd is empty'],
+    poster_url: {
+        type: String,
+        required: [true, 'poster_url fieldd is empty'],
     },
-    director_name:{
-        type:String,
-        required:[true,'director name field cannot be empty']
-    },      
-    run_time:{
-        type:Number,
-        required:[true,'time duration is not filled']
+    director_name: {
+        type: String,
+        required: [true, 'director name field cannot be empty']
     },
-    admin:{
-        type:String,
-        required:[true,'admin field is empty']
+    run_time: {
+        type: Number,
+        required: [true, 'time duration is not filled']
     },
-    movie_lang:{
-        type:Array
+    admin: {
+        type: String,
+        required: [true, 'admin field is empty']
     },
-    actors:{
-        type:Array
+    movie_lang: {
+        type: Array
     },
-    movie_gener:{
-        type:Array
+    actors: {
+        type: Array
     },
-    story:{
-        type:String,
-        required:[true,'story field cannot be empty']
+    movie_gener: {
+        type: Array
     },
-    like:{
-        type:Number,
-        default:0
+    story: {
+        type: String,
+        required: [true, 'story field cannot be empty']
     },
-    page_visited:{
-        type:Number,
-        default:0
+    like: {
+        type: Number,
+        default: 0
     },
-    release_date:{
-        type:Date,
-        required:[true,'releasing date cannot be empty']
+    page_visited: {
+        type: Number,
+        default: 0
     },
-    dislike:{
-        type:Number,
-        default:0
+    release_date: {
+        type: Date,
+        required: [true, 'releasing date cannot be empty']
     },
-    createTime:{
-        type:Date,
-        default:Date()
+    dislike: {
+        type: Number,
+        default: 0
+    },
+    createTime: {
+        type: Date,
+        default: Date()
     }
-}
-)
+})
 
-var moviemodel=new mongoose.model("movie",movieschema)  
+var moviemodel = new mongoose.model("movie", movieschema)
 
-router.post('/',async (req,res,next)=>{
+router.post('/', async(req, res, next) => {
     delete req.body.movie_data.actor
     delete req.body.movie_data.language
     delete req.body.movie_data.gener
-    req.body.movie_data.name=req.body.movie_data.movie_name.toLowerCase()
+    req.body.movie_data.name = req.body.movie_data.movie_name.toLowerCase()
     console.log(req.body.movie_data)
-    let movie=new moviemodel(req.body.movie_data)
-    await movie.save().then(response=>{
-        console.log(response)
-        res.send({"result":"movie added"})
-    })
-    .catch(err=>{
-        console.log(err)
-        res.send({"result":"unable to add movie"})    
-    })
-    
+    let movie = new moviemodel(req.body.movie_data)
+    await movie.save().then(response => {
+            console.log(response)
+            res.send({ "result": "movie added" })
+        })
+        .catch(err => {
+            console.log(err)
+            res.send({ "result": "unable to add movie" })
+        })
+
 })
-router.get('/:name',async (req,response,next)=>{
-    await moviemodel.findOne({movie_name:{$regex:new RegExp(req.params.name,'i')}},{_id:0})
-    .then(res=>{
-        console.log(res)
-        response.send(res);
-    })
-    .catch(err=>{
-        response.send(err)
-    })
+router.get('/:name', async(req, response, next) => {
+    await moviemodel.findOne({ movie_name: { $regex: new RegExp(req.params.name, 'i') } }, { _id: 0 })
+        .then(async res => {
+            console.log(res)
+            response.send(res);
+            await moviemodel.updateOne({ movie_name: { $regex: new RegExp(req.params.name, 'i') } }, { $inc: { page_visited: 1 } }, (err4, res4) => {})
+        })
+        .catch(async err => {
+
+            response.send(err)
+            await conn.collection("pendingmovies").insertOne({ name: req.params.name }, (err5, res5) => {})
+        })
 })
-router.post('/addactor',async (req,res,next)=>{
-    let actor=new actormodel({name:req.body.name.toLowerCase(),img_url:req.body.img_url,wiki_link:req.body.wiki})
-    await conn.collection("actors").update({name:req.body.name.toLowerCase()},{name:req.body.name.toLowerCase(),img_url:req.body.img_url,wiki_link:req.body.wiki},{upsert:true}).then(response=>{
-        console.log(response)
-        res.send({"error":"no_errors"})
-    })
-    .catch(err=>{
-        console.log(err)
-        res.send({"error":"unable to insert actor into ddatabase"})
-    })
+router.post('/addactor', async(req, res, next) => {
+    let actor = new actormodel({ name: req.body.name.toLowerCase(), img_url: req.body.img_url, wiki_link: req.body.wiki })
+    await conn.collection("actors").update({ name: req.body.name.toLowerCase() }, { name: req.body.name.toLowerCase(), img_url: req.body.img_url, wiki_link: req.body.wiki }, { upsert: true }).then(response => {
+            console.log(response)
+            res.send({ "error": "no_errors" })
+        })
+        .catch(err => {
+            console.log(err)
+            res.send({ "error": "unable to insert actor into ddatabase" })
+        })
 })
 
-router.get('/actor/:data',async (req,res,next)=>{
+router.get('/actor/:data', async(req, res, next) => {
     console.log(req.params.data)
-    let actor=req.params.data.toLowerCase()
-    await actormodel.findOne({name:actor},{_id:0,name:1,img_url:1,wiki_link:1}).then(response=>{
+    let actor = req.params.data.toLowerCase()
+    await actormodel.findOne({ name: actor }, { _id: 0, name: 1, img_url: 1, wiki_link: 1 }).then(response => {
         console.log(response)
-        res.send({"actor_name":response.name,"img_url":response.img_url,"wiki_link":response.wiki_link})
-    }).catch(err=>{
-        res.send({"result":"actor not in database"})
+        res.send({ "actor_name": response.name, "img_url": response.img_url, "wiki_link": response.wiki_link })
+    }).catch(err => {
+        res.send({ "result": "actor not in database" })
     })
-    
+
 })
-module.exports=router
+module.exports = router

@@ -14,16 +14,17 @@ async function fun(req, response) {
     if (ans.length > 0) {
         console.log(ans)
 
-        response.cookie('auth_token', "token", {
-                expires: new Date(Date.now() + 300000),
-                httpOnly: true,
-                //secure: true,
-                domain: 'hexanebackend.herokuapp.com',
-                path: '/'
-            })
-            // response.setHeader("set-cookie", ["iam=developer;"])
-        console.log(response.headers.cookie)
-        response.send({ "res": "login successful", "id": ans[0]._id, "cook": "response.cookies", "rumor": response.cookies })
+        // response.cookie('auth_token', "token", {
+        //         expires: new Date(Date.now() + 300000),
+        //         //httpOnly: true,
+        //         samesite: 'strict',
+        //         secure: true,
+        //         // domain: 'localhost:5000',
+        //         path: '/'
+        //     })
+        response.setHeader("set-cookie", `auth_token=token; samesite=none; expires=${new Date(Date.now() + 300000)}; secure; httpOnly`)
+        console.log(response.req.rawHeaders)
+        response.send({ "res": "login successful", "id": ans[0]._id, "cook": response.req.rawHeaders })
             //response.send({ "res": "login successful", "id": ans[0]._id })
         await conn.collection("login").updateMany({ "_id": mongodb.ObjectID(ans[0]._id) }, { $set: { "logStatus": 1 } })
             .then(res2 => {
