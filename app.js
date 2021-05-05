@@ -22,7 +22,7 @@ setInterval(() => {
 
 var app = express();
 
-app.use(cors({ origin: ['https://example.com', 'https://stackoverflow.com', 'https://shubhamxpatel.github.io'], credentials: true }))
+app.use(cors({ origin: ['https://example.com', 'https://stackoverflow.com', 'https://shubhamxpatel.github.io', 'http://localhost:3000'], credentials: true }))
     //app.use(express.static('/public'))
     // view engine setup
     //app.use((req, res, next) => {

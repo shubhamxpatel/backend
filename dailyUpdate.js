@@ -168,7 +168,7 @@ async function fun(movie) {
     } else {
         await db.collection("pendingmovies").deleteMany({}).then(async() => {
             await creatematch()
-            console.log('connection closed')
+                //  console.log('connection closed')
                 //console.log('connection closed')
         })
     }
@@ -194,7 +194,7 @@ async function pendingmovie() {
             fun(arr[count])
         } else {
             await creatematch()
-            console.log('connection closed')
+                // console.log('connection closed')
 
         }
     });
@@ -252,8 +252,10 @@ async function creatematch() {
                 }, { upsert: true },
                 (err, res) => {
                     console.log(responsarr[i].movie_name + "updated")
-                    if (i == h) { console.log('connection closed');
-                        client.close() }
+                    if (i == h - 1) {
+                        console.log('connection closed');
+                        client.close()
+                    }
                 })
         }
 
