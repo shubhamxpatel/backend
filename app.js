@@ -18,7 +18,7 @@ setInterval(() => {
     if (new Date().getHours() === 1) {
         nightupdate()
     }
-}, 120000);
+}, 60 * 60 * 1000);
 
 var app = express();
 
