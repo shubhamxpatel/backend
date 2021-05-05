@@ -168,8 +168,8 @@ async function fun(movie) {
     } else {
         await db.collection("pendingmovies").deleteMany({}).then(async() => {
             await creatematch()
-
-            //console.log('connection closed')
+            console.log('connection closed')
+                //console.log('connection closed')
         })
     }
 }
@@ -194,6 +194,7 @@ async function pendingmovie() {
             fun(arr[count])
         } else {
             await creatematch()
+            console.log('connection closed')
 
         }
     });
@@ -224,22 +225,25 @@ async function creatematch() {
             corrarr.push([])
             for (let j = 0; j < h; j++) {
                 let x = corr(i, j)
-                    //corrarr[i].push({ index: j, name: responsarr[j].movie_name, matchP: x })
+                    //console.log(x)
+                corrarr[i].push({ index: j, name: responsarr[j].movie_name, matchP: x })
             }
             corrarr[i].sort((a, b) => {
-                if (a.matchP == b.match) {
-                    return responsarr[b.index].page_visited - responsarr[a.index].page_visited
-                } else {
-                    return -a.matchP + b.matchP
-                }
-            })
+                    if (a.matchP == b.match) {
+                        return responsarr[b.index].page_visited - responsarr[a.index].page_visited
+                    } else {
+                        return -a.matchP + b.matchP
+                    }
+                })
+                //console.log(corrarr[i])
+
             corrarr[i] = corrarr[i].slice(0, 20)
 
 
         }
         for (let i = 0; i < h; i++) {
 
-            await db.collection("recommend").updateOne({ movie: responsarr[i].movie_name }, {
+            db.collection("recommend").updateOne({ movie: responsarr[i].movie_name }, {
                     $set: {
                         movie: responsarr[i].movie_name,
                         recommendArr: corrarr[i],
@@ -248,10 +252,12 @@ async function creatematch() {
                 }, { upsert: true },
                 (err, res) => {
                     console.log(responsarr[i].movie_name + "updated")
+                    if (i == h) { console.log('connection closed');
+                        client.close() }
                 })
         }
-        console.log('connection closed')
-        client.close()
+
+        //client.close()
     }
 }
 //pendingmovie()
