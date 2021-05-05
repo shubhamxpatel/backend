@@ -4,6 +4,29 @@ const uri = "mongodb+srv://shubhamp:Kumar@123@cluster0.n5lab.mongodb.net/test?re
 var db;
 var arr = []
 var count;
+var h, w;
+var weight = [.05, .2, .3, .3, .1, .05]
+var list = []
+var responsarr = []
+
+function cal(s1, s2) {
+
+    let x1 = s1.split(" ")
+    let x2 = s2.split(" ")
+    let x3 = x1.filter(x => x2.includes(x))
+    let x4 = new Set([...x1, ...x2])
+
+
+    return x3.length / x4.size
+}
+
+function corr(a, b) {
+    let p = 0;
+    for (let i = 0; i < w; i++) {
+        p = p + weight[i] * cal(list[a][i], list[b][i])
+    }
+    return p;
+}
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
@@ -143,9 +166,10 @@ async function fun(movie) {
     if (count < arr.length) {
         fun(arr[count])
     } else {
-        await db.collection("pendingmovies").deleteMany({}).then(() => {
-            client.close();
-            console.log('connection closed')
+        await db.collection("pendingmovies").deleteMany({}).then(async() => {
+            await creatematch()
+
+            //console.log('connection closed')
         })
     }
 }
@@ -156,6 +180,7 @@ async function pendingmovie() {
             //pendingmovie()
 
         arr = []
+        list = []
         let result = await db.collection('pendingmovies').find({})
         await result.toArray().then(mv => {
 
@@ -168,12 +193,66 @@ async function pendingmovie() {
             count = 0;
             fun(arr[count])
         } else {
-            console.log('connection closed')
-            client.close()
+            await creatematch()
+
         }
     });
 
 
 
 }
+
+async function creatematch() {
+    let result = await db.collection("movies").find()
+    responsarr = await result.toArray()
+    if (responsarr.length > 0) {
+        for (let i = 0; i < responsarr.length; i++) {
+            //console.log(responsarr[i].movie_name)
+            list.push([])
+            list[i].push(responsarr[i].movie_name)
+            list[i].push(responsarr[i].movie_lang.join(" "))
+            list[i].push(responsarr[i].movie_actors.join(" "))
+            list[i].push(responsarr[i].movie_gener.join(" "))
+            list[i].push(responsarr[i].director_name)
+            list[i].push(`${responsarr[i].release_date}`.split("-")[0])
+
+        }
+        h = list.length
+        w = list[0].length
+        let corrarr = []
+        for (let i = 0; i < h; i++) {
+            corrarr.push([])
+            for (let j = 0; j < h; j++) {
+                let x = corr(i, j)
+                    //corrarr[i].push({ index: j, name: responsarr[j].movie_name, matchP: x })
+            }
+            corrarr[i].sort((a, b) => {
+                if (a.matchP == b.match) {
+                    return responsarr[b.index].page_visited - responsarr[a.index].page_visited
+                } else {
+                    return -a.matchP + b.matchP
+                }
+            })
+            corrarr[i] = corrarr[i].slice(0, 20)
+
+
+        }
+        for (let i = 0; i < h; i++) {
+
+            await db.collection("recommend").updateOne({ movie: responsarr[i].movie_name }, {
+                    $set: {
+                        movie: responsarr[i].movie_name,
+                        recommendArr: corrarr[i],
+                        lastModified: new Date().toTimeString()
+                    }
+                }, { upsert: true },
+                (err, res) => {
+                    console.log(responsarr[i].movie_name + "updated")
+                })
+        }
+        console.log('connection closed')
+        client.close()
+    }
+}
+//pendingmovie()
 module.exports = pendingmovie

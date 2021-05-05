@@ -15,7 +15,7 @@ var nightupdate = require('./dailyUpdate')
 
 setInterval(() => {
     console.log(new Date().getHours())
-    if (new Date().getHours() === 0) {
+    if (new Date().getHours() === 1) {
         nightupdate()
     }
 }, 60 * 60 * 1000);
