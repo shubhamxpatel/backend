@@ -49,6 +49,12 @@ async function fun1(id, res) {
             res.send({ "res": 0 })
         })
 }
+router.post('/checkEmail', async(req, res, next) => {
+    let result = await conn.collection("login").find({ "user": req.body.email })
+    let arr = await result.toArray()
+    let x = (arr.length) ? false : true
+    res.send({ checkResult: x })
+})
 router.post('/in', function(req, res, next) {
     let id = ""
     console.log(req.body, req.cookies)
