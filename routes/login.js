@@ -9,6 +9,7 @@ var ans = ""
 
 /* GET users listing. */
 async function fun(req, response) {
+    console.log(req.session)
     let cursor = await conn.collection("login").find({ "user": req.email, "pass": req.pass })
     ans = await cursor.toArray()
     if (ans.length > 0) {
@@ -22,8 +23,8 @@ async function fun(req, response) {
         //         // domain: 'localhost:5000',
         //         path: '/'
         //     })
-        // await response.setHeader("set-cookie", `auth_token=token; samesite=none; expires=${new Date(Date.now() + 300000)}; secure; httpOnly`)
-        //console.log(response.req.rawHeaders)
+        await response.setHeader("set-cookie", `auth_token=token; samesite=none; expires=${new Date(Date.now() + 300000)}; secure; httpOnly`)
+        console.log(response.req.rawHeaders)
         response.send({ "res": "login successful", "id": ans[0]._id, "cook": response.req.rawHeaders })
             //response.send({ "res": "login successful", "id": ans[0]._id })
         await conn.collection("login").updateMany({ "_id": mongodb.ObjectID(ans[0]._id) }, { $set: { "logStatus": 1 } })

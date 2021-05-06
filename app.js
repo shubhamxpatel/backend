@@ -24,22 +24,22 @@ setInterval(() => {
 var app = express();
 
 app.use(cors({ origin: ['https://example.com', 'https://stackoverflow.com', 'https://shubhamxpatel.github.io', 'http://localhost:3000'], credentials: true }))
-app.use(session({
-    secret: 'foo',
-    store: MongoStore.create({
-        mongoUrl: 'mongodb://localhost:27017/test',
-        ttl: 300 * 60,
-        autoRemove: 'native'
+    // app.use(session({
+    //     secret: 'foo',
+    //     store: MongoStore.create({
+    //         mongoUrl: 'mongodb+srv://shubhamp:Kumar@123@cluster0.n5lab.mongodb.net/test',
+    //         ttl: 300 * 60,
+    //         autoRemove: 'native'
 
-    }),
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        maxAge: 1000 * 60, // two weeks
-        sameSite: 'none',
-        secure: true
-    }
-}));
+//     }),
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//         maxAge: 1000 * 60, // two weeks
+//         sameSite: 'none',
+//         secure: true
+//     }
+// }));
 
 //app.use(express.static('/public'))
 // view engine setup
