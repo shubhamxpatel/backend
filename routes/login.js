@@ -23,9 +23,13 @@ async function fun(req, response) {
         //         path: '/'
         //     })
         await response.setHeader("set-cookie", `auth_token=token; samesite=none; expires=${new Date(Date.now() + 300000)}; secure; httpOnly`)
-        console.log(response.req.rawHeaders)
-        response.send({ "res": "login successful", "id": ans[0]._id, "cook": response.req.rawHeaders })
-            //response.send({ "res": "login successful", "id": ans[0]._id })
+            .then(() => {
+                console.log(response.req.rawHeaders)
+                response.send({ "res": "login successful", "id": ans[0]._id, "cook": response.req.rawHeaders })
+            })
+
+
+        //response.send({ "res": "login successful", "id": ans[0]._id })
         await conn.collection("login").updateMany({ "_id": mongodb.ObjectID(ans[0]._id) }, { $set: { "logStatus": 1 } })
             .then(res2 => {
                 // console.log(res2)
