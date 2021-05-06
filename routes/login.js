@@ -51,7 +51,7 @@ async function fun1(id, res) {
 }
 router.post('/in', function(req, res, next) {
     let id = ""
-    console.log(req.body, req.headers.cookie)
+    console.log(req.body, req.cookies)
     fun(req.body, res)
         //console.log(ans)
         //res.send(ans);
