@@ -12,7 +12,8 @@ var adminRouter = require('./routes/admin')
 var movieRouter = require('./routes/movie')
 var cors = require('cors')
 var nightupdate = require('./dailyUpdate')
-
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 setInterval(() => {
     console.log(new Date().getHours())
     if (new Date().getHours() === 1) {
@@ -23,9 +24,25 @@ setInterval(() => {
 var app = express();
 
 app.use(cors({ origin: ['https://example.com', 'https://stackoverflow.com', 'https://shubhamxpatel.github.io', 'http://localhost:3000'], credentials: true }))
-    //app.use(express.static('/public'))
-    // view engine setup
-    //app.use((req, res, next) => {
+app.use(session({
+    secret: 'foo',
+    store: MongoStore.create({
+        mongoUrl: 'mongodb://localhost:27017/test',
+        ttl: 300 * 60,
+        autoRemove: 'native'
+
+    }),
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000 * 60 // two weeks
+
+    }
+}));
+
+//app.use(express.static('/public'))
+// view engine setup
+//app.use((req, res, next) => {
 
 //     res.setHeader('Access-Control-Allow-Origin', '*')
 //  res.setHeader('Access-Control-Allow-Credentials')
