@@ -19,6 +19,7 @@ async function fun(req, response) {
     ans = await cursor.toArray()
     if (ans.length > 0) {
         console.log(ans)
+        req.session.email = req.email
 
         // response.cookie('auth_token', "token", {
         //         expires: new Date(Date.now() + 300000),
@@ -67,7 +68,7 @@ router.post('/checkEmail', async(req, res, next) => {
 router.post('/in', function(req, res, next) {
     let id = ""
 
-    req.session.email = req.body.email
+
     console.log(req.body, req.session)
 
     fun(req.body, res)
@@ -77,6 +78,7 @@ router.post('/in', function(req, res, next) {
 });
 router.get('/out/:id', function(req, res, next) {
     let id = ""
+    req.session.ID = req.params.id
     console.log(req.params.id)
     fun1(req.params.id, res)
         //console.log(ans)
