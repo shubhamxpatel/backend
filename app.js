@@ -40,29 +40,29 @@ app.use(cors({ origin: ['https://example.com', 'https://stackoverflow.com', 'htt
 
 //}
 var sess = {
-        secret: 'foo',
-        store: MongoStore.create({
-            //mongoUrl: 'mongodb+srv://shubhamp:Kumar@123@cluster0.n5lab.mongodb.net/test?retryWrites=true&w=majority',
-            mongoUrl: 'mongodb://localhost:27017/test',
-            ttl: 300 * 60,
-            autoRemove: 'native'
+    secret: 'foo',
+    store: MongoStore.create({
+        mongoUrl: 'mongodb+srv://shubhamp:Kumar@123@cluster0.n5lab.mongodb.net/test?retryWrites=true&w=majority',
+        //mongoUrl: 'mongodb://localhost:27017/test',
+        ttl: 300 * 60,
+        autoRemove: 'native'
 
-        }),
-        resave: false,
-        saveUninitialized: true,
-        cookie: {
-            expires: new Date(new Date().getTime() + 1000 * 60 * 5), // two weeks
-            httpOnly: false
-                //sameSite: 'none',
-                //secure: true
+    }),
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: new Date(new Date().getTime() + 1000 * 60 * 5), // two weeks
+        httpOnly: false
+            //sameSite: 'none',
+            //secure: true
 
-        }
     }
-    // if (app.get('env') === 'production') {
-    //     app.set('trust proxy', 1) // trust first proxy
-    //     sess.cookie.secure = true // serve secure cookies
-    //     sess.cookie.sameSite = 'none'
-    // }
+}
+if (app.get('env') === 'production') {
+    app.set('trust proxy', 1) // trust first proxy
+    sess.cookie.secure = true // serve secure cookies
+    sess.cookie.sameSite = 'none'
+}
 app.use(session(sess));
 
 // app.use((req, res, next) => {
