@@ -13,13 +13,13 @@ router.use((req, res, next) => {
         next()
     })
     /* GET users listing. */
-async function fun(req, response) {
+async function fun(req1, req, response) {
     //console.log(req.session)
     let cursor = await conn.collection("login").find({ "user": req.email, "pass": req.pass })
     ans = await cursor.toArray()
     if (ans.length > 0) {
         console.log(ans)
-        req.session.email = req.email
+        req1.session.email = req.email
 
         // response.cookie('auth_token', "token", {
         //         expires: new Date(Date.now() + 300000),
@@ -71,7 +71,7 @@ router.post('/in', function(req, res, next) {
 
     console.log(req.body, req.session)
 
-    fun(req.body, res)
+    fun(req, req.body, res)
         //console.log(ans)
         //res.send(ans);
         //console.log(res)
