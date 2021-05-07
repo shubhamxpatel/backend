@@ -9,7 +9,7 @@ var ans = ""
 router.use((req, res, next) => {
         // req.session.email = "shubham patel";
         console.log(req.cookies)
-            //  res.setHeader('set-cookie', `connect.sid=; path=/; samesite=none; secure;`)
+            //  res.setHeader('set-cookie', `connect.sid=; path=/; samesite=none; secure; samesite=none; secure;`)
         next()
     })
     /* GET users listing. */
@@ -30,7 +30,7 @@ async function fun(req1, req, response) {
         //         path: '/'
         //     })
 
-        response.setHeader('set-cookie', `auth=1; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/;`);
+        response.setHeader('set-cookie', `auth=1; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; samesite=none; secure;`);
 
         // console.log(response.req.rawHeaders)
         req1.session.ID = ans[0]._id
@@ -48,7 +48,7 @@ async function fun(req1, req, response) {
         return
 
     } else {
-        response.setHeader('set-cookie', `auth=0; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/;`);
+        response.setHeader('set-cookie', `auth=0; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; samesite=none; secure;`);
 
         response.send({ "res": "login unsuccessful", auth: 0 })
         return
@@ -89,7 +89,7 @@ router.get('/out', function(req, res, next) {
     delete req.session.ID
     console.log(req.session)
     console.log(req.params.id)
-    res.setHeader('set-cookie', `auth=0; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/;`);
+    res.setHeader('set-cookie', `auth=0; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; samesite=none; secure;`);
     res.send({ auth: 0 })
         //fun1(req.params.id, res)
         //console.log(ans)
