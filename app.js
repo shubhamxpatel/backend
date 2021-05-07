@@ -51,9 +51,9 @@ var sess = {
     resave: false,
     saveUninitialized: true,
     cookie: {
-        maxAge: 1000 * 60, // two weeks
-        //sameSite: 'none',
-        //secure: true
+        expires: new Date(new Date().getTime() + 1000 * 60 * 5) // two weeks
+            //sameSite: 'none',
+            //secure: true
 
     }
 }
