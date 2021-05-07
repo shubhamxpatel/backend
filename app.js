@@ -52,9 +52,9 @@ var sess = {
     saveUninitialized: true,
     cookie: {
         expires: new Date(new Date().getTime() + 1000 * 60 * 5), // two weeks
-        httpOnly: false
-            //sameSite: 'none',
-            //secure: true
+
+        //sameSite: 'none',
+        //secure: true
 
     }
 }
