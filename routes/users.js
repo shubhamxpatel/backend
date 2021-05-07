@@ -9,10 +9,10 @@ var conn = require('../public/javascripts/connect.js')
 router.use((req, res, next) => {
         console.log(req.session)
         if (req.session.ID) {
-            res.setHeader('set-cookie', `auth=1; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; domain=localhost;`);
+            res.setHeader('set-cookie', `auth=1;`) // expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; samesite=none; secure;`);
             next()
         } else {
-            res.setHeader('set-cookie', `auth=0; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; domain=localhost;`);
+            res.setHeader('set-cookie', `auth=0;`) // expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; samesite=none; secure;`);
             res.send({ auth: 0 })
         }
     })
