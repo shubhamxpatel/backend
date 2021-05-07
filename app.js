@@ -51,7 +51,8 @@ var sess = {
     resave: false,
     saveUninitialized: true,
     cookie: {
-        expires: new Date(new Date().getTime() + 1000 * 60 * 5) // two weeks
+        expires: new Date(new Date().getTime() + 1000 * 60 * 5), // two weeks
+        httpOnly: false
             //sameSite: 'none',
             //secure: true
 
@@ -63,6 +64,7 @@ if (app.get('env') === 'production') {
     sess.cookie.sameSite = 'none'
 }
 app.use(session(sess));
+
 // app.use((req, res, next) => {
 //     app.set('trust proxy', 1) // trust first proxy
 //     req.session.cookie.secure = true // serve secure cookies
