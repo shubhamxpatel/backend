@@ -7,7 +7,7 @@ var mongodb = require('mongodb')
 var conn = require("../public/javascripts/connect.js");
 var ans = ""
 router.use((req, res, next) => {
-        req.session.email = "shubham patel";
+        // req.session.email = "shubham patel";
         console.log(req.cookies)
             //  res.setHeader('set-cookie', `connect.sid=; path=/; samesite=none; secure;`)
         next()
@@ -30,12 +30,12 @@ async function fun(req1, req, response) {
         //         path: '/'
         //     })
 
-        response.setHeader('set-cookie', `auth=1; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; domain=localhost;`);
+        response.setHeader('set-cookie', `auth=1; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/;`);
 
         // console.log(response.req.rawHeaders)
         req1.session.ID = ans[0]._id
 
-        response.send({ "res": "login successful", "id": ans[0]._id, "cook": response.req.rawHeaders })
+        response.send({ "res": "login successful", "id": ans[0]._id, "cook": response.req.rawHeaders, auth: 1 })
 
         //response.send({ "res": "login successful", "id": ans[0]._id })
         await conn.collection("login").updateMany({ "_id": mongodb.ObjectID(ans[0]._id) }, { $set: { "logStatus": 1 } })
@@ -48,9 +48,9 @@ async function fun(req1, req, response) {
         return
 
     } else {
-        response.setHeader('set-cookie', `auth=0; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; domain=localhost;`);
+        response.setHeader('set-cookie', `auth=0; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/;`);
 
-        response.send({ "res": "login unsuccessful" })
+        response.send({ "res": "login unsuccessful", auth: 0 })
         return
     }
     //response.send(ans)
@@ -89,8 +89,8 @@ router.get('/out', function(req, res, next) {
     delete req.session.ID
     console.log(req.session)
     console.log(req.params.id)
-    res.setHeader('set-cookie', `auth=0; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; domain=localhost;`);
-    res.send({})
+    res.setHeader('set-cookie', `auth=0; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/;`);
+    res.send({ auth: 0 })
         //fun1(req.params.id, res)
         //console.log(ans)
         //res.send(ans);

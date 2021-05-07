@@ -7,12 +7,13 @@ var conn = require('../public/javascripts/connect.js')
 /* GET users listing. */
 
 router.use((req, res, next) => {
+        console.log(req.session)
         if (req.session.ID) {
             res.setHeader('set-cookie', `auth=1; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; domain=localhost;`);
             next()
         } else {
             res.setHeader('set-cookie', `auth=0; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; domain=localhost;`);
-            res.send({})
+            res.send({ auth: 0 })
         }
     })
     // async function fun(s, response) {
@@ -40,9 +41,11 @@ async function fetch_user(id, response) {
 
             console.log(res)
             if (res) {
-                //console.log(res.file.buffer.toString('base64'))
+                res.auth = 1
+                    //console.log(res.file.buffer.toString('base64'))
                 response.send(res)
             } else {
+                res.auth = 0
                 response.send({ "res": "login unsuccessful1" })
             }
         })
