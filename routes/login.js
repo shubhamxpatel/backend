@@ -4,7 +4,7 @@ var path = require('path')
 var mongodb = require('mongodb')
 
 //console.log(path.join(__dirname,'../public'))
-var conn = require("../public/javascripts/connect.js")
+var conn = require("../public/javascripts/connect.js");
 var ans = ""
 router.use((req, res, next) => {
         req.session.email = "shubham patel";
@@ -30,10 +30,14 @@ async function fun(req1, req, response) {
         //         path: '/'
         //     })
 
-        await response.setHeader("set-cookie", `auth_token=token; samesite=none; expires=${new Date(new Date().getTime()+60*60*1000*24).toGMTString()}; secure; httpOnly`)
-            // console.log(response.req.rawHeaders)
+        res.setHeader('set-cookie', `auth=1; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; domain=localhost;`);
+
+        // console.log(response.req.rawHeaders)
+        req.session.ID = ans[0]._id
+
         response.send({ "res": "login successful", "id": ans[0]._id, "cook": response.req.rawHeaders })
-            //response.send({ "res": "login successful", "id": ans[0]._id })
+
+        //response.send({ "res": "login successful", "id": ans[0]._id })
         await conn.collection("login").updateMany({ "_id": mongodb.ObjectID(ans[0]._id) }, { $set: { "logStatus": 1 } })
             .then(res2 => {
                 // console.log(res2)
@@ -44,6 +48,8 @@ async function fun(req1, req, response) {
         return
 
     } else {
+        res.setHeader('set-cookie', `auth=0; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; domain=localhost;`);
+
         response.send({ "res": "login unsuccessful" })
         return
     }
@@ -65,6 +71,7 @@ router.post('/checkEmail', async(req, res, next) => {
     let x = (arr.length) ? false : true
     res.send({ checkResult: x })
 })
+
 router.post('/in', function(req, res, next) {
     let id = ""
 
@@ -76,12 +83,15 @@ router.post('/in', function(req, res, next) {
         //res.send(ans);
         //console.log(res)
 });
-router.get('/out/:id', function(req, res, next) {
+
+router.get('/out', function(req, res, next) {
     let id = ""
-    req.session.ID = req.params.id
+    delete req.session.ID
     console.log(req.session)
     console.log(req.params.id)
-    fun1(req.params.id, res)
+    res.setHeader('set-cookie', `auth=0; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; domain=localhost;`);
+    res.send({})
+        //fun1(req.params.id, res)
         //console.log(ans)
         //res.send(ans);
         //console.log(res)

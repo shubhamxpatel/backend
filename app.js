@@ -91,7 +91,6 @@ app.use(express.static('public'));
 //app.use(express.static('../movie_suggetion/public'));
 
 
-
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/ram', router)
