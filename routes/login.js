@@ -29,7 +29,7 @@ async function fun(req, response) {
         //         path: '/'
         //     })
 
-        await response.setHeader("set-cookie", `auth_token=token; samesite=none; expires=${new Date(Date.now() + 300000)}; secure; httpOnly`)
+        await response.setHeader("set-cookie", `auth_token=token; samesite=none; expires=${new Date(new Date().getTime()+60*60*1000*24).toGMTString()}; secure; httpOnly`)
             // console.log(response.req.rawHeaders)
         response.send({ "res": "login successful", "id": ans[0]._id, "cook": response.req.rawHeaders })
             //response.send({ "res": "login successful", "id": ans[0]._id })
