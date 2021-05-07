@@ -3,6 +3,15 @@ var router = express.Router();
 var conn = require('../public/javascripts/connect.js')
 var mongodb = require('mongodb')
     /* GET home page. */
+router.use((req, res, next) => {
+    //for (let p in res) { console.log(p) };
+
+    //res.setHeader('set-cookie', `connect.sid=${req.cookies['connect.sid']}; path=/; samesite=none; secure;`)
+    //console.log(req.cookies['connect.sid'], req.session)
+    //req.session.email = "shCookiubham patel";
+
+    next()
+})
 async function login(req, res) {
     let admin = req.body.admin
     let pass = req.body.pass

@@ -8,12 +8,13 @@ var conn = require("../public/javascripts/connect.js")
 var ans = ""
 router.use((req, res, next) => {
         req.session.email = "shubham patel";
-        console.log(req.session)
+        console.log(req.cookies)
+            //  res.setHeader('set-cookie', `connect.sid=; path=/; samesite=none; secure;`)
         next()
     })
     /* GET users listing. */
 async function fun(req, response) {
-    console.log(req.session)
+    //console.log(req.session)
     let cursor = await conn.collection("login").find({ "user": req.email, "pass": req.pass })
     ans = await cursor.toArray()
     if (ans.length > 0) {
@@ -29,7 +30,7 @@ async function fun(req, response) {
         //     })
 
         await response.setHeader("set-cookie", `auth_token=token; samesite=none; expires=${new Date(Date.now() + 300000)}; secure; httpOnly`)
-        console.log(response.req.rawHeaders)
+            // console.log(response.req.rawHeaders)
         response.send({ "res": "login successful", "id": ans[0]._id, "cook": response.req.rawHeaders })
             //response.send({ "res": "login successful", "id": ans[0]._id })
         await conn.collection("login").updateMany({ "_id": mongodb.ObjectID(ans[0]._id) }, { $set: { "logStatus": 1 } })
@@ -63,8 +64,10 @@ router.post('/checkEmail', async(req, res, next) => {
 })
 router.post('/in', function(req, res, next) {
     let id = ""
-    req.session.email = req.email
-    console.log(req.body, req.cookies)
+
+    req.session.email = req.body.email
+    console.log(req.body, req.session)
+
     fun(req.body, res)
         //console.log(ans)
         //res.send(ans);

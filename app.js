@@ -36,11 +36,14 @@ app.use(cors({ origin: ['https://example.com', 'https://stackoverflow.com', 'htt
 //  res.setHeader('Access-Control-Allow-Credentials')
 //  next()
 //})
+//if (app.get('env') === 'production') {
 
-app.use(session({
+//}
+var sess = {
     secret: 'foo',
     store: MongoStore.create({
-        mongoUrl: 'mongodb+srv://shubhamp:Kumar@123@cluster0.n5lab.mongodb.net/test?retryWrites=true&w=majority',
+        //mongoUrl: 'mongodb+srv://shubhamp:Kumar@123@cluster0.n5lab.mongodb.net/test?retryWrites=true&w=majority',
+        mongoUrl: 'mongodb://localhost:27017/test',
         ttl: 300 * 60,
         autoRemove: 'native'
 
@@ -49,10 +52,22 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         maxAge: 1000 * 60, // two weeks
-
+        //sameSite: 'none',
+        //secure: true
 
     }
-}));
+}
+if (app.get('env') === 'production') {
+    app.set('trust proxy', 1) // trust first proxy
+    sess.cookie.secure = true // serve secure cookies
+}
+app.use(session(sess));
+// app.use((req, res, next) => {
+//     app.set('trust proxy', 1) // trust first proxy
+//     req.session.cookie.secure = true // serve secure cookies
+//     req.session.cookie.sameSite = 'none'
+//     next()
+// })
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use((req, res, next) => {
