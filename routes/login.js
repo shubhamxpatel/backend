@@ -6,8 +6,12 @@ var mongodb = require('mongodb')
 //console.log(path.join(__dirname,'../public'))
 var conn = require("../public/javascripts/connect.js")
 var ans = ""
-
-/* GET users listing. */
+router.use((req, res, next) => {
+        req.session.email = "shubham patel";
+        console.log(req.session)
+        next()
+    })
+    /* GET users listing. */
 async function fun(req, response) {
     console.log(req.session)
     let cursor = await conn.collection("login").find({ "user": req.email, "pass": req.pass })
@@ -23,6 +27,7 @@ async function fun(req, response) {
         //         // domain: 'localhost:5000',
         //         path: '/'
         //     })
+
         await response.setHeader("set-cookie", `auth_token=token; samesite=none; expires=${new Date(Date.now() + 300000)}; secure; httpOnly`)
         console.log(response.req.rawHeaders)
         response.send({ "res": "login successful", "id": ans[0]._id, "cook": response.req.rawHeaders })
@@ -58,6 +63,7 @@ router.post('/checkEmail', async(req, res, next) => {
 })
 router.post('/in', function(req, res, next) {
     let id = ""
+    req.session.email = req.email
     console.log(req.body, req.cookies)
     fun(req.body, res)
         //console.log(ans)

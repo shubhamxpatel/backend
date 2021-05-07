@@ -14,32 +14,19 @@ var cors = require('cors')
 var nightupdate = require('./dailyUpdate')
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
-setInterval(() => {
+/*setInterval(() => {
     console.log(new Date().getHours())
     if (new Date().getHours() === 1) {
         nightupdate()
     }
-}, 60 * 60 * 1000);
+}, 60 * 60 * 1000);*/
 
 var app = express();
 
 app.use(cors({ origin: ['https://example.com', 'https://stackoverflow.com', 'https://shubhamxpatel.github.io', 'http://localhost:3000'], credentials: true }))
-    // app.use(session({
-    //     secret: 'foo',
-    //     store: MongoStore.create({
-    //         mongoUrl: 'mongodb+srv://shubhamp:Kumar@123@cluster0.n5lab.mongodb.net/test',
-    //         ttl: 300 * 60,
-    //         autoRemove: 'native'
 
-//     }),
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: {
-//         maxAge: 1000 * 60, // two weeks
-//         sameSite: 'none',
-//         secure: true
-//     }
-// }));
+
+
 
 //app.use(express.static('/public'))
 // view engine setup
@@ -49,8 +36,30 @@ app.use(cors({ origin: ['https://example.com', 'https://stackoverflow.com', 'htt
 //  res.setHeader('Access-Control-Allow-Credentials')
 //  next()
 //})
+
+app.use(session({
+    secret: 'foo',
+    store: MongoStore.create({
+        mongoUrl: 'mongodb+srv://shubhamp:Kumar@123@cluster0.n5lab.mongodb.net/test?retryWrites=true&w=majority',
+        collectionName: "shubham",
+        ttl: 300 * 60,
+        autoRemove: 'native'
+
+    }),
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000 * 60, // two weeks
+
+
+    }
+}));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.use((req, res, next) => {
+    console.log(req.sessionID);
+    next()
+})
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -63,6 +72,7 @@ app.use(express.static('public'));
 //app.use(express.static('../movie_suggetion/public'));
 
 
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/ram', router)
@@ -70,9 +80,7 @@ app.use('/login', loginRouter)
 app.use('/register', registerRouter)
 app.use('/admin', adminRouter)
 app.use('/movie', movieRouter)
-router.get('/', (req, res, next) => {
-    res.sendFile("public/help.html", { root: path.join(__dirname) })
-})
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
