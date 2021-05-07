@@ -30,7 +30,7 @@ async function fun(req1, req, response) {
         //         path: '/'
         //     })
 
-        res.setHeader('set-cookie', `auth=1; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; domain=localhost;`);
+        response.setHeader('set-cookie', `auth=1; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; domain=localhost;`);
 
         // console.log(response.req.rawHeaders)
         req.session.ID = ans[0]._id
@@ -48,7 +48,7 @@ async function fun(req1, req, response) {
         return
 
     } else {
-        res.setHeader('set-cookie', `auth=0; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; domain=localhost;`);
+        response.setHeader('set-cookie', `auth=0; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; domain=localhost;`);
 
         response.send({ "res": "login unsuccessful" })
         return
