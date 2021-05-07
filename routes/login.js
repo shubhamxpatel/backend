@@ -79,6 +79,7 @@ router.post('/in', function(req, res, next) {
 router.get('/out/:id', function(req, res, next) {
     let id = ""
     req.session.ID = req.params.id
+    console.log(req.session)
     console.log(req.params.id)
     fun1(req.params.id, res)
         //console.log(ans)
