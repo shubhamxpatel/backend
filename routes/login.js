@@ -33,7 +33,7 @@ async function fun(req1, req, response) {
         response.setHeader('set-cookie', `auth=1; expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; domain=localhost;`);
 
         // console.log(response.req.rawHeaders)
-        req.session.ID = ans[0]._id
+        req1.session.ID = ans[0]._id
 
         response.send({ "res": "login successful", "id": ans[0]._id, "cook": response.req.rawHeaders })
 
