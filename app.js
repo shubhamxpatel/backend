@@ -51,7 +51,7 @@ var sess = {
     resave: false,
     saveUninitialized: true,
     cookie: {
-        expires: new Date(new Date().getTime() + 60 * 60 * 1000 * 24).toGMTString(), // two weeks
+        expires: new Date(new Date().getTime() + 60 * 60 * 1000 * 24), // two weeks
 
         //sameSite: 'none',
         //secure: true
