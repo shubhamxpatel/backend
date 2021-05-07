@@ -41,7 +41,6 @@ app.use(session({
     secret: 'foo',
     store: MongoStore.create({
         mongoUrl: 'mongodb+srv://shubhamp:Kumar@123@cluster0.n5lab.mongodb.net/test?retryWrites=true&w=majority',
-        collectionName: "shubham",
         ttl: 300 * 60,
         autoRemove: 'native'
 
