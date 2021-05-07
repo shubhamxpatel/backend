@@ -52,6 +52,7 @@ var sess = {
     saveUninitialized: true,
     cookie: {
         expires: new Date(new Date().getTime() + 60 * 60 * 1000 * 24), // two weeks
+        path: '/'
 
         //sameSite: 'none',
         //secure: true
