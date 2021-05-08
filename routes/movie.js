@@ -87,6 +87,13 @@ var movieschema = new mongoose.Schema({
 })
 
 var moviemodel = new mongoose.model("movie", movieschema)
+router.use(() => {
+    if (req.session.ID) {
+        next()
+    } else {
+        res.send({ auth: 0 })
+    }
+})
 
 router.post('/', async(req, res, next) => {
     delete req.body.movie_data.actor

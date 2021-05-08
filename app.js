@@ -10,6 +10,7 @@ var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');
 var adminRouter = require('./routes/admin')
 var movieRouter = require('./routes/movie')
+var searchmovie = require('./routes/searchmovie')
 var cors = require('cors')
 var nightupdate = require('./dailyUpdate')
 const session = require('express-session');
@@ -98,6 +99,7 @@ app.use('/login', loginRouter)
 app.use('/register', registerRouter)
 app.use('/admin', adminRouter)
 app.use('/movie', movieRouter)
+app.use('/searchmovie', searchmovie)
 
 
 // catch 404 and forward to error handler
