@@ -113,7 +113,8 @@ router.post('/', async(req, res, next) => {
 
 })
 router.get('/:name', async(req, response, next) => {
-    await moviemodel.findOne({ movie_name: { $regex: new RegExp(req.params.name, 'i') } }, { _id: 0 })
+    let name = req.params.name.toLowerCase()
+    await moviemodel.findOne({ movie_name: name }, { _id: 0 })
         .then(async res => {
             console.log(res)
             response.send(res);
