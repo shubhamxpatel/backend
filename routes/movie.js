@@ -87,7 +87,7 @@ var movieschema = new mongoose.Schema({
 })
 
 var moviemodel = new mongoose.model("movie", movieschema)
-router.use(() => {
+router.use((req, res, next) => {
     if (req.session.ID) {
         next()
     } else {

@@ -4,7 +4,7 @@ var path = require('path')
 var mongodb = require('mongodb');
 var conn = require('../public/javascripts/connect.js');
 
-router.use(() => {
+router.use((req, res, next) => {
     if (req.session.ID) {
         next()
     } else {
