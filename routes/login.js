@@ -35,7 +35,7 @@ async function fun(req1, req, response) {
         // console.log(response.req.rawHeaders)
         req1.session.ID = ans[0]._id
 
-        response.send({ "res": "login successful", "id": ans[0]._id, "cook": response.req.rawHeaders, auth: 1 })
+        response.send({ "res": "login successful", "id": ans[0]._id, auth: 1 })
 
         //response.send({ "res": "login successful", "id": ans[0]._id })
         await conn.collection("login").updateMany({ "_id": mongodb.ObjectID(ans[0]._id) }, { $set: { "logStatus": 1 } })

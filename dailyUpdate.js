@@ -228,7 +228,7 @@ async function creatematch() {
             for (let j = 0; j < h; j++) {
                 let x = corr(i, j)
                     //console.log(x)
-                corrarr[i].push({ index: j, name: responsarr[j].movie_name, matchP: x })
+                corrarr[i].push({ index: j, movie_name: responsarr[j].movie_name, poster_url: responsarr[j].poster_url, matchP: x })
             }
             corrarr[i].sort((a, b) => {
                     if (a.matchP == b.match) {
@@ -274,5 +274,5 @@ async function creatematch() {
 
     }
 }
-//pendingmovie()
+pendingmovie()
 module.exports = pendingmovie
