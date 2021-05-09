@@ -121,12 +121,13 @@ router.get('/:name', async(req, response, next) => {
 
             if (res) {
                 await moviemodel.updateOne({ movie_name: { $regex: new RegExp(req.params.name, 'i') } }, { $inc: { page_visited: 1 } }, (err4, res4) => {})
+                res.auth = 1
                 response.send(res);
 
             } else {
                 console.log("movie not found")
                 await conn.collection("pendingmovies").insertOne({ name: req.params.name }, (err5, res5) => { console.log(res5) })
-                res.send({})
+                res.send({ auth: 1 })
 
             }
 
