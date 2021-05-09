@@ -42,6 +42,8 @@ async function fetch_user(id, response) {
             console.log(res)
             if (res) {
                 res.auth = 1
+                delete res.pass
+                delete res._id
                     //console.log(res.file.buffer.toString('base64'))
                 response.send(res)
             } else {
