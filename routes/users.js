@@ -51,16 +51,20 @@ async function fetch_user(id, response) {
                         { $project: { recommendArr: { movie_name: 1, poster_url: 1 }, _id: 0 } },
 
                     ])
-                    let rr1 = await rr.toArray()
-                    console.log(rr1[0].recommendArr)
-                    rr1[0].recommendArr.splice(0, 5)
-                    movies = [...movies, ...rr1[0].recommendArr]
-                }
-                delete res.watchlist
-                res.movie = movies
+                    rr.toArray().then(rr1 => {
+                        console.log(rr1[0].recommendArr)
+                        rr1[0].recommendArr.splice(0, 5)
+                        movies = [...movies, ...rr1[0].recommendArr]
+                        if (m === 0) {
+                            delete res.watchlist
+                            res.movie = movies
 
-                //console.log(res.file.buffer.toString('base64'))
-                response.send(res)
+                            //console.log(res.file.buffer.toString('base64'))
+                            response.send(res)
+                        }
+                    })
+                }
+
             } else {
                 res.auth = 0
                 response.send({ "res": "login unsuccessful1" })
