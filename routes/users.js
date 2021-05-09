@@ -52,9 +52,9 @@ async function fetch_user(id, response) {
 
                     ])
                     let rr1 = await rr.toArray()
-                    console.log(rr1.recommendArr)
-                    rr1.recommendArr.splice(0, 5)
-                    movies = [...movies, ...rr1.recommendArr]
+                    console.log(rr1[0].recommendArr)
+                    rr1[0].recommendArr.splice(0, 5)
+                    movies = [...movies, ...rr1[0].recommendArr]
                 }
                 delete res.watchlist
                 res.movie = movies
