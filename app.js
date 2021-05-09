@@ -15,12 +15,12 @@ var cors = require('cors')
 var nightupdate = require('./dailyUpdate')
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
-/*setInterval(() => {
+setInterval(() => {
     console.log(new Date().getHours())
-    if (new Date().getHours() === 1) {
+    if (new Date().getHours() === 12) {
         nightupdate()
     }
-}, 60 * 60 * 1000);*/
+}, 60 * 60 * 1000);
 
 var app = express();
 

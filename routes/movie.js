@@ -87,13 +87,13 @@ var movieschema = new mongoose.Schema({
 })
 
 var moviemodel = new mongoose.model("movie", movieschema)
-router.use((req, res, next) => {
-    if (req.session.ID) {
-        next()
-    } else {
-        res.send({ auth: 0 })
-    }
-})
+    // router.use((req, res, next) => {
+    //     if (req.session.ID) {
+    //         next()
+    //     } else {
+    //         res.send({ auth: 0 })
+    //     }
+    // })
 
 router.post('/', async(req, res, next) => {
     delete req.body.movie_data.actor
@@ -114,16 +114,27 @@ router.post('/', async(req, res, next) => {
 })
 router.get('/:name', async(req, response, next) => {
     let name = req.params.name.toLowerCase()
+    console.log(name)
     await moviemodel.findOne({ movie_name: name }, { _id: 0 })
         .then(async res => {
             console.log(res)
-            response.send(res);
-            await moviemodel.updateOne({ movie_name: { $regex: new RegExp(req.params.name, 'i') } }, { $inc: { page_visited: 1 } }, (err4, res4) => {})
+
+            if (res) {
+                await moviemodel.updateOne({ movie_name: { $regex: new RegExp(req.params.name, 'i') } }, { $inc: { page_visited: 1 } }, (err4, res4) => {})
+                response.send(res);
+
+            } else {
+                console.log("movie not found")
+                await conn.collection("pendingmovies").insertOne({ name: req.params.name }, (err5, res5) => { console.log(res5) })
+                res.send({})
+
+            }
+
         })
         .catch(async err => {
 
             response.send(err)
-            await conn.collection("pendingmovies").insertOne({ name: req.params.name }, (err5, res5) => {})
+
         })
 })
 router.post('/addactor', async(req, res, next) => {

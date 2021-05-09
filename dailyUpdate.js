@@ -202,6 +202,7 @@ async function pendingmovie() {
 
 
 }
+client.onError
 
 async function creatematch() {
     let result = await db.collection("movies").find()
@@ -221,6 +222,7 @@ async function creatematch() {
         h = list.length
         w = list[0].length
         let corrarr = []
+        let movies1 = []
         for (let i = 0; i < h; i++) {
             corrarr.push([])
             for (let j = 0; j < h; j++) {
@@ -241,25 +243,35 @@ async function creatematch() {
 
 
         }
-        for (let i = 0; i < h; i++) {
+        let p = 0;
 
-            db.collection("recommend").updateOne({ movie: responsarr[i].movie_name }, {
-                    $set: {
-                        movie: responsarr[i].movie_name,
-                        recommendArr: corrarr[i],
-                        lastModified: new Date().toTimeString()
-                    }
-                }, { upsert: true },
-                (err, res) => {
-                    console.log(responsarr[i].movie_name + "updated")
-                    if (i == h - 1) {
-                        console.log('connection closed');
-                        client.close()
-                    }
-                })
+        function sett() {
+            if (p == h) {
+                console.log("connection closed");
+                client.close();
+                return;
+            }
+            setTimeout(() => {
+                db.collection("recommend").updateOne({ movie: responsarr[p].movie_name }, {
+                        $set: {
+                            movie: responsarr[p].movie_name,
+                            recommendArr: corrarr[p],
+                            lastModified: new Date().toTimeString()
+                        }
+                    }, { upsert: true },
+                    (err, res) => {
+                        console.log(responsarr[p].movie_name + "updated")
+                        console.log("hello")
+                        p++
+                        sett()
+                    })
+
+
+            }, 100);
+
         }
+        sett()
 
-        //client.close()
     }
 }
 //pendingmovie()
