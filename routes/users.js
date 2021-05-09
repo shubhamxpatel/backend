@@ -37,7 +37,7 @@ router.use((req, res, next) => {
     // });
 async function fetch_user(id, response) {
     console.log("_id:" + `ObjectId("${id}")`)
-    await conn.collection("login").findOne({ "_id": mongodb.ObjectID(id) }).then(res => {
+    await conn.collection("login").findOne({ "_id": mongodb.ObjectID(id) }).then(async res => {
 
             console.log(res)
             if (res) {
