@@ -16,8 +16,8 @@ var nightupdate = require('./dailyUpdate')
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 setInterval(() => {
-    console.log(new Date())
-    if (new Date().getHours() === 17 && new Date().getMinutes() === 22 && new Date().getSeconds() === 50) {
+    console.log(new Date().getHours(), new Date().getMinutes(), new Date().getSeconds())
+    if (new Date().getHours() === 17 && new Date().getMinutes() === 50 && new Date().getSeconds() === 50) {
         nightupdate()
     }
 }, 1000);
