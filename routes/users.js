@@ -47,11 +47,12 @@ async function fetch_user(id, response) {
                 res.watchlist.splice(res.watchlist.length - 4)
                 let movies = []
                 for (let m = res.watchlist.length - 1; m >= 0; m--) {
-                    let rr = await db.collection("recommend").aggregate([
+                    let rr = await db.collection("recommend").aggregate([{ $match: { movie: watchlist[i] } },
                         { $project: { recommendArr: { movie_name: 1, poster_url: 1 }, _id: 0 } },
                         { $limit: parseInt(5) }
                     ])
                     let rr1 = await rr.toArray()
+                    console.log(rr)
                     movies = [...movies, ...rr1]
                 }
                 delete res.watchlist
