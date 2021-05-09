@@ -31,10 +31,16 @@ async function fun(image, req, response) {
                 let ext = image.name.split(".")
                 let title = ext[ext.length - 1]
                     //await image.mv(`${up_path}${id}.${title}`).then(async ()=>{
-                await conn.collection("login").insertOne({ "user": req.body.email, "pass": req.body.pass, "img": `${id}`, "type": image.mimetype, "file": binary(data1), "logStatus": 0 })
+                let x = Math.floor(Math.random() * 300)
+                let pr = await conn.collection("movies").aggregate([{ $project: { movie_name: 1, _id: 0 } }, { $skip: parseInt(x) }, { $limit: parseInt(4) }])
+                let watch = await pr.toArray()
+                let watchlist = []
+                watch.forEach((item) => { watchlist.push(item.movie_name) })
+                await conn.collection("login").insertOne({ "user": req.body.email, "pass": req.body.pass, "img": `${id}`, "type": image.mimetype, "file": binary(data1), "logStatus": 0, "watchlist": watchlist })
                     .then(res => {
                         console.log("Registration Successful")
                         response.send({ "res": "Registration Successful!" })
+
                     })
                     .catch(err => {
                         response.send(err)

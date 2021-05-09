@@ -1,44 +1,71 @@
 #include<bits/stdc++.h>
 using namespace std;
-class Solution {
-public:
-    map<pair<string,string>,bool> mp;
-    bool isScramble(string s1, string s2) {
-        cout<<s1<<" "<<s2<<endl;
-        //string s3=s2;
-        if(mp.find({s1,s2})!=mp.end())
+int check(int k,int arr[],int a,int b,int n)
+{
+    int m=k;
+    int r=a-b;
+    int q=b*m;
+    for(int i=0;i<n;i++)
+    {
+        int x=((arr[i]-q)/r+1<=0)?0:(arr[i]-q)/r+1;
+        if(k>=x)
         {
-            return mp[{s1,s2}];
+            k-=x;
         }
-        
-        if(s1.size()<=2)
+        else
         {
-            if(s1==s2)
-            {
-                return mp[{s1,s2}]=true;
-            }
-            reverse(s1.begin(),s1.end());
-            if(s1==s2)
-            {
-                return mp[{s1,s2}]=true;
-            }
-            return mp[{s1,s2}]=false;
+            return 0;
         }
-        bool ans=false;
-        //reverse(s3.begin(),s3.end());
-        int n=s2.size();
-        for(int i=0;i<s1.size()-1;i++)
-        {
-            ans=ans|(isScramble(s1.substr(0,i+1),s2.substr(0,i+1))&isScramble(s1.substr(i+1),s2.substr(i+1)))|(isScramble(s1.substr(n-i-1),s2.substr(0,i+1))&isScramble(s1.substr(0,n-i-1),s2.substr(i+1)));
-            if(ans==true){return mp[{s1,s2}]=ans;}
-        }
-        return mp[{s1,s2}]=ans;
-        
+
     }
-};
+    return 1;
+}
+int solve(int lo,int hi,int arr[],int a,int b,int n)
+{
+    int mid=(lo+hi)/2;
+    cout<<mid<<" "<<check(mid,arr,a,b,n)<<endl;
+    if(check(mid,arr,a,b,n))
+    {
+        if(check(mid-1,arr,a,b,n))
+        {
+            return solve(lo,mid-1,arr,a,b,n);
+        }
+        else
+        {
+            return mid;
+        }
+    }
+    else
+    {
+        return solve(mid+1,hi,arr,a,b,n);
+    }
+}
 int main()
 {
-    Solution sol;
-    cout<<sol.isScramble("abcdbdacbdac",
-"bdacabcdbdac")<<endl;
+    srand(time(0));
+    int a,b,n;
+    cin>>a>>b>>n;
+    //a=rand()%300+15;
+    //b=rand()%300+15;
+    //n=rand()%100+5;
+    if(a<b)
+    {
+        swap(a,b);
+
+    }
+    cout<<a<<" "<<b<<" "<<n<<endl;
+    int arr[]={14,25,19,13,38};
+    for(int i=0;i<n;i++)
+    {
+        cin>>arr[i];
+        //arr[i]=rand()%10000000;
+        //cout<<arr[i]<<" ";
+    }//cout<<endl;
+
+    sort(arr,arr+n);
+    int lo=0;
+    int hi=arr[n-1]/b +1;
+    cout<<lo<<" "<<hi<<endl;
+    cout<<solve(lo,hi,arr,a,b,n);
+
 }
