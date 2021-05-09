@@ -44,16 +44,18 @@ async function fetch_user(id, response) {
                 res.auth = 1
                 delete res.pass
                 delete res._id
-                res.watchlist.splice(res.watchlist.length - 4)
+                    //ssres.watchlist.splice(res.watchlist.length - 4)
+                console.log(res.watchlist)
                 let movies = []
                 for (let m = res.watchlist.length - 1; m >= 0; m--) {
-                    let rr = await conn.collection("recommend").aggregate([{ $match: { movie: watchlist[i] } },
+                    let rr = await conn.collection("recommend").aggregate([{ $match: { movie: res.watchlist[m] } },
                         { $project: { recommendArr: { movie_name: 1, poster_url: 1 }, _id: 0 } },
 
                     ])
                     rr.toArray().then(rr1 => {
-                        console.log(rr1[0].recommendArr)
-                        rr1[0].recommendArr.splice(0, 5)
+                        //console.log(rr1[0].recommendArr)
+                        rr1[0].recommendArr.splice(6)
+                            // console.log(rr1[0].recommendArr.length)
                         movies = [...movies, ...rr1[0].recommendArr]
                         if (m === 0) {
                             delete res.watchlist
@@ -64,6 +66,7 @@ async function fetch_user(id, response) {
                         }
                     })
                 }
+
 
             } else {
                 res.auth = 0

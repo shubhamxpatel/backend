@@ -12,10 +12,25 @@ conn.on('error', () => {
 })
 async function fun() {
     //console.log(conn)
-    let rr = await conn.collection("recommend").aggregate([{ $match: { movie: "queen" } },
-        { $project: { recommendArr: { movie_name: 1, poster_url: 1 }, _id: 0 } },
+    let watchlist = [
+        'fanny and alexander',
+        'blade runner',
+        'the elephant man',
+        "monty python's life of brian"
+    ]
+    let movies = []
+    for (let m = watchlist.length - 1; m >= 0; m--) {
+        let rr = await conn.collection("recommend").aggregate([{ $match: { movie: watchlist[m] } },
+            { $project: { recommendArr: { movie_name: 1, poster_url: 1 }, _id: 0 } },
 
-    ])
-    let rr1 = await rr.toArray()
-    console.log(rr1[0])
+        ])
+        rr.toArray().then(rr1 => {
+            console.log(rr1[0].recommendArr)
+            rr1[0].recommendArr.splice(0, 5)
+            movies = [...movies, ...rr1[0].recommendArr]
+            if (m === 0) {
+
+            }
+        })
+    }
 }
