@@ -251,23 +251,23 @@ async function creatematch() {
                 client.close();
                 return;
             }
-            setTimeout(() => {
-                db.collection("recommend").updateOne({ movie: responsarr[p].movie_name }, {
-                        $set: {
-                            movie: responsarr[p].movie_name,
-                            recommendArr: corrarr[p],
-                            lastModified: new Date().toTimeString()
-                        }
-                    }, { upsert: true },
-                    (err, res) => {
-                        console.log(responsarr[p].movie_name + "updated")
-                        console.log("hello")
-                        p++
-                        sett()
-                    })
+            // setTimeout(() => {
+            db.collection("recommend").updateOne({ movie: responsarr[p].movie_name }, {
+                    $set: {
+                        movie: responsarr[p].movie_name,
+                        recommendArr: corrarr[p],
+                        lastModified: new Date().toTimeString()
+                    }
+                }, { upsert: true },
+                (err, res) => {
+                    console.log(responsarr[p].movie_name + "updated")
+                    console.log("hello")
+                    p++
+                    sett()
+                })
 
 
-            }, 100);
+            // }, 100);
 
         }
         sett()
