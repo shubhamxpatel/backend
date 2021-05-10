@@ -122,7 +122,7 @@ router.get('/:name', async(req, response, next) => {
             if (res) {
                 await moviemodel.updateOne({ movie_name: name }, { $inc: { page_visited: 1 } }, (err4, res4) => {})
 
-                await connc.collection("login").findOne({ _id: mongodb.ObjectId(req.session.ID) }, (async(errr, resr) => {
+                await conn.collection("login").findOne({ _id: mongodb.ObjectId(req.session.ID) }, (async(errr, resr) => {
                     if (resr.movie_visited.includes(name) === false) { resr.movie_visited.push(name) }
                     resr.watchlist = resr.watchlist.filter((x) => { return x !== name })
                     resr.watchlist.push(name)
