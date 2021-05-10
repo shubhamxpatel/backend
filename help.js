@@ -18,19 +18,8 @@ async function fun() {
         'the elephant man',
         "monty python's life of brian"
     ]
-    let movies = []
-    for (let m = watchlist.length - 1; m >= 0; m--) {
-        let rr = await conn.collection("recommend").aggregate([{ $match: { movie: watchlist[m] } },
-            { $project: { recommendArr: { movie_name: 1, poster_url: 1 }, _id: 0 } },
 
-        ])
-        rr.toArray().then(rr1 => {
-            console.log(rr1[0].recommendArr)
-            rr1[0].recommendArr.splice(0, 5)
-            movies = [...movies, ...rr1[0].recommendArr]
-            if (m === 0) {
-
-            }
-        })
-    }
+    await conn.collection("login").findOne({ user: "sp1651999@gmail.com" }, { watchlist: 1, movie_visited: 1 }, (res, err) => {
+        console.log(err)
+    })
 }
