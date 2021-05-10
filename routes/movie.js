@@ -120,7 +120,8 @@ router.get('/:name', async(req, response, next) => {
             console.log(res)
 
             if (res) {
-                await moviemodel.updateOne({ movie_name: { $regex: new RegExp(req.params.name, 'i') } }, { $inc: { page_visited: 1 } }, (err4, res4) => {})
+                await moviemodel.updateOne({ movie_name: name }, { $inc: { page_visited: 1 } }, (err4, res4) => {})
+                await conn.collection("login").updateOne({ _id: mongodb.ObjectId(req.session.ID) }, { $push: { watchlist: name } }, (err7, res7) => {})
                 res.auth = 1
                 response.send(res);
 
