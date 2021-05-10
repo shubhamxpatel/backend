@@ -36,7 +36,7 @@ async function fun(image, req, response) {
                 let watch = await pr.toArray()
                 let watchlist = []
                 watch.forEach((item) => { watchlist.push(item.movie_name) })
-                await conn.collection("login").insertOne({ "user": req.body.email, "pass": req.body.pass, "img": `${id}`, "type": image.mimetype, "file": binary(data1), "logStatus": 0, "watchlist": watchlist })
+                await conn.collection("login").insertOne({ "user": req.body.email, "pass": req.body.pass, "img": `${id}`, "type": image.mimetype, "file": binary(data1), "logStatus": 0, "watchlist": watchlist, "movie_visited": [] })
                     .then(res => {
                         console.log("Registration Successful")
                         response.send({ "res": "Registration Successful!" })

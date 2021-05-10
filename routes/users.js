@@ -7,34 +7,56 @@ var conn = require('../public/javascripts/connect.js')
 /* GET users listing. */
 
 router.use((req, res, next) => {
-        console.log(req.session)
-        if (req.session.ID) {
-            res.setHeader('set-cookie', `auth=1;`) // expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; samesite=none; secure;`);
-            next()
-        } else {
-            res.setHeader('set-cookie', `auth=0;`) // expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; samesite=none; secure;`);
-            res.send({ auth: 0 })
-        }
-    })
-    // async function fun(s, response) {
-    //   await conn.collection("comments").insertOne({ "comment": s }).then(res => {
-    //     ans = res["ops"]
-    //     console.log(ans)
-    //     response.send(ans)
-    //   })
-    //   //console.log(p["ops"])
-    //   //ans = p["ops"]
-    // }
-    // router.post('/', function (req, res, next) {
-    //   let id = ""
-    //   if (req) {
-    //     id = req.body["comment"]
-    //   }
-    //   fun(id, res)
-    //   //console.log(ans)
-    //   //res.send(ans);
-    //   //console.log(res)
-    // });
+    console.log(req.session)
+    if (req.session.ID) {
+        res.setHeader('set-cookie', `auth=1;`) // expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; samesite=none; secure;`);
+        next()
+    } else {
+        res.setHeader('set-cookie', `auth=0;`) // expires=${new Date(new Date().getTime()+60 * 60 * 1000 * 24*30)}; path=/; samesite=none; secure;`);
+        res.send({ auth: 0 })
+    }
+})
+async function fetchr(watchlist, i, response, movie, res) {
+    if (i == -1) {
+        delete res.watchlist
+        res.movie = movies
+
+        //console.log(res.file.buffer.toString('base64'))
+        response.send(res)
+    } else {
+        let rr = await conn.collection("recommend").aggregate([{ $match: { movie: res.watchlist[m] } },
+            { $project: { recommendArr: { movie_name: 1, poster_url: 1 }, _id: 0 } },
+
+        ])
+        rr.toArray().then(rr1 => {
+            //console.log(rr1[0].recommendArr)
+            rr1[0].recommendArr.splice(9)
+                // console.log(rr1[0].recommendArr.length)
+            movies = [...movies, ...rr1[0].recommendArr]
+            fetchr(watchlist, i--, response, movies, res)
+
+        })
+    }
+}
+// async function fun(s, response) {
+//   await conn.collection("comments").insertOne({ "comment": s }).then(res => {
+//     ans = res["ops"]
+//     console.log(ans)
+//     response.send(ans)
+//   })
+//   //console.log(p["ops"])
+//   //ans = p["ops"]
+// }
+// router.post('/', function (req, res, next) {
+//   let id = ""
+//   if (req) {
+//     id = req.body["comment"]
+//   }
+//   fun(id, res)
+//   //console.log(ans)
+//   //res.send(ans);
+//   //console.log(res)
+// });
 async function fetch_user(id, response) {
     console.log("_id:" + `ObjectId("${id}")`)
     await conn.collection("login").findOne({ "_id": mongodb.ObjectID(id) }).then(async res => {
@@ -47,25 +69,8 @@ async function fetch_user(id, response) {
                 res.watchlist.splice(0, res.watchlist.length - 4)
                 console.log(res.watchlist)
                 let movies = []
-                for (let m = res.watchlist.length - 1; m >= 0; m--) {
-                    let rr = await conn.collection("recommend").aggregate([{ $match: { movie: res.watchlist[m] } },
-                        { $project: { recommendArr: { movie_name: 1, poster_url: 1 }, _id: 0 } },
+                fetchr(watchlist, 3, response, movies, res)
 
-                    ])
-                    rr.toArray().then(rr1 => {
-                        //console.log(rr1[0].recommendArr)
-                        rr1[0].recommendArr.splice(6)
-                            // console.log(rr1[0].recommendArr.length)
-                        movies = [...movies, ...rr1[0].recommendArr]
-                        if (m === 0) {
-                            delete res.watchlist
-                            res.movie = movies
-
-                            //console.log(res.file.buffer.toString('base64'))
-                            response.send(res)
-                        }
-                    })
-                }
 
 
             } else {
