@@ -25,7 +25,7 @@ async function fetchr(watchlist, i, response, movie, res) {
         //console.log(res.file.buffer.toString('base64'))
         response.send(res)
     } else {
-        let rr = await conn.collection("recommend").aggregate([{ $match: { movie: res.watchlist[m] } },
+        let rr = await conn.collection("recommend").aggregate([{ $match: { movie: watchlist[i] } },
             { $project: { recommendArr: { movie_name: 1, poster_url: 1 }, _id: 0 } },
 
         ])
@@ -71,7 +71,7 @@ async function fetch_user(id, response) {
                 res.watchlist.splice(0, res.watchlist.length - 4)
                 console.log(res.watchlist)
                 let movies = []
-                fetchr(watchlist, 3, response, movies, res)
+                await fetchr(res.watchlist, 3, response, movies, res)
 
 
 
