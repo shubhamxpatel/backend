@@ -127,6 +127,7 @@ router.get('/:name', async(req, response, next) => {
                     if (resr.movie_visited.includes(name) === false) { resr.movie_visited.push(name) }
                     resr.watchlist = resr.watchlist.filter((x) => { return x !== name })
                     resr.watchlist.push(name)
+                    console.log(resr.movie_visited, resr.watchlist)
                     await conn.collection("login").updateOne({ _id: mongodb.ObjectId(req.session.ID) }, { $set: { movie_visited: resr.movie_visited, watchlist: resr.watchlist } }, (err7, res7) => {})
 
 
