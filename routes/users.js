@@ -19,6 +19,7 @@ router.use((req, res, next) => {
 async function fetchr(watchlist, i, response, movie, res) {
     if (i == -1) {
         delete res.watchlist
+        console.log(movie)
         res.movie = movies
 
         //console.log(res.file.buffer.toString('base64'))
