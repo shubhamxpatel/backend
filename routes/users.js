@@ -34,7 +34,8 @@ async function fetchr(watchlist, i, response, movie, res) {
             rr1[0].recommendArr.splice(9)
                 // console.log(rr1[0].recommendArr.length)
             movies = [...movies, ...rr1[0].recommendArr]
-            fetchr(watchlist, i--, response, movies, res)
+            i = i - 1;
+            fetchr(watchlist, i, response, movies, res)
 
         })
     }
