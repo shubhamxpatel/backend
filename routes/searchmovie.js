@@ -5,6 +5,7 @@ var mongodb = require('mongodb');
 var conn = require('../public/javascripts/connect.js');
 
 router.use((req, res, next) => {
+
     if (req.session.ID) {
         next()
     } else {
@@ -88,8 +89,8 @@ async function getYear(s) {
 }
 
 router.get('/', async(req, res, next) => {
-    let name = req.query.name
-    let value = req.query.value
+    let name = req.query.name.toLowerCase()
+    let value = req.query.value.toLowerCase()
     let p = []
     if (name === "movie") {
         p = await getmovie(value)
