@@ -96,10 +96,13 @@ async function getTrailer(query) {
     return ans;
 }
 async function fun(movie) {
-    let result = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=ad2b8365&t=${movie}`)
+    console.log(movie)
+    let result = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=ad2b8365&t=${escape(movie)}`)
     let text;
+
     try {
         text = await result.json();
+        console.log(text)
     } catch (error) {
         console.log(error, "json error occured")
     }
@@ -166,6 +169,7 @@ async function fun(movie) {
     if (count < arr.length) {
         fun(arr[count])
     } else {
+        console.log("hello")
         await db.collection("pendingmovies").deleteMany({}).then(async() => {
             await creatematch()
                 //  console.log('connection closed')
@@ -191,6 +195,7 @@ async function pendingmovie() {
         })
         if (arr.length > 0) {
             count = 0;
+            console.log(arr[0])
             fun(arr[count])
         } else {
             await creatematch()
@@ -274,5 +279,5 @@ async function creatematch() {
 
     }
 }
-//pendingmovie()
+pendingmovie()
 module.exports = pendingmovie
