@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var conn = require('../public/javascripts/connect.js')
-var nightupdate = require('./dailyUpdate')
+var nightupdate = require('../dailyUpdate')
 
 var mongodb = require('mongodb')
     /* GET home page. */
