@@ -101,7 +101,8 @@ router.get('/', async(req, res, next) => {
             console.log("movie_not found")
             await conn.collection("pendingmovies").insertOne({ name: value }, (err5, res5) => {
                 console.log(res5);
-                nightupdate()
+                fetch('https://spmovieserver.herokuapp.com')
+                //nightupdate()
             })
         }
     }
