@@ -31,6 +31,7 @@ async function login(req, res) {
                     })
                     //console.log(res.cookies.name)
                 res.send({ "id": resp._id })
+                console.log("night update starts")
                 nightupdate();
 
 

@@ -114,7 +114,7 @@ router.post('/', async(req, res, next) => {
 })
 router.get('/:name', async(req, response, next) => {
     let name = req.params.name.toLowerCase()
-    console.log(name)
+    console.log("my name is", name)
     await moviemodel.findOne({ movie_name: name }, { _id: 0 })
         .then(async res => {
             console.log(res)
