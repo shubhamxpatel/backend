@@ -96,7 +96,7 @@ router.get('/', async(req, res, next) => {
         p = await getmovie(value)
         if (p.length == 0) {
             console.log("movie_not found")
-            await conn.collection("pendingmovies").insertOne({ name: req.params.name }, (err5, res5) => { console.log(res5) })
+            await conn.collection("pendingmovies").insertOne({ name: value }, (err5, res5) => { console.log(res5) })
         }
     }
     if (name === "year") {
