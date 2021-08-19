@@ -27,7 +27,7 @@ function corr(a, b) {
     }
     return p;
 }
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, connectTimeoutMS: 3000, keepAlive: 1 });
 
 
 async function get(img_url, s) {
