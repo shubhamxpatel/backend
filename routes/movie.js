@@ -119,7 +119,7 @@ router.get('/:name', async(req, response, next) => {
         .then(async res => {
             console.log(res)
 
-            if (res) {
+            if (res.length > 0) {
                 await moviemodel.updateOne({ movie_name: name }, { $inc: { page_visited: 1 } }, (err4, res4) => {})
 
                 await conn.collection("login").findOne({ _id: mongodb.ObjectId(req.session.ID) }, (async(errr, resr) => {
