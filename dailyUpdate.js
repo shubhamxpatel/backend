@@ -261,7 +261,7 @@ async function creatematch() {
                 }, { upsert: true },
                 (err, res) => {
                     console.log(responsarr[p].movie_name + "updated")
-                    console.log("hello")
+                        //console.log("hello")
                     p++
                     sett()
                 })

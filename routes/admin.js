@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var conn = require('../public/javascripts/connect.js')
+var nightupdate = require('./dailyUpdate')
+
 var mongodb = require('mongodb')
     /* GET home page. */
 router.use((req, res, next) => {
@@ -29,6 +31,7 @@ async function login(req, res) {
                     })
                     //console.log(res.cookies.name)
                 res.send({ "id": resp._id })
+                nightupdate();
 
 
             } else {
