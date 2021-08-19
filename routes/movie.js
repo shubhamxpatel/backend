@@ -117,7 +117,7 @@ router.get('/:name', async(req, response, next) => {
     console.log("my name is", name)
     await moviemodel.findOne({ movie_name: name }, { _id: 0 })
         .then(async res => {
-            console.log(res)
+            console.log(res.length, res)
 
             if (res.length > 0) {
                 await moviemodel.updateOne({ movie_name: name }, { $inc: { page_visited: 1 } }, (err4, res4) => {})
