@@ -85,8 +85,11 @@ async function getTrailer(query) {
         for (x of result) { arr1.push(unescape(x[0])) }
         for (let p of arr1) {
             if (p.match(/https:\/\/www\.youtube\.com.*?"/g)) {
-                let x = `${p.match(/watch\?v=(.*?)&/)[1]}`
-                    //console.log(`https://www.youtube.com/embed/${x}`, " 1")
+                let x = "";
+                if (p.match(/watch\?v=(.*?)&/)) {
+                    x = `${p.match(/watch\?v=(.*?)&/)[1]}`;
+                }
+                //console.log(`https://www.youtube.com/embed/${x}`, " 1")
                 return `https://www.youtube.com/embed/${x}`;
             }
         }
@@ -102,7 +105,7 @@ async function fun(movie) {
 
     try {
         text = await result.json();
-        console.log(text)
+        console.log(text, "hello")
     } catch (error) {
         console.log(error, "json error occured")
     }
@@ -165,16 +168,20 @@ async function fun(movie) {
 
     }
     count++;
+    await db.collection("pendingmovies").deleteMany({ name: movie })
     console.log(count)
     if (count < arr.length) {
+        //.then(async() => {
+
+        //  console.log('connection closed')
+        //console.log('connection closed')
         fun(arr[count])
+            //})
+
     } else {
         console.log("hello")
-        await db.collection("pendingmovies").deleteMany({}).then(async() => {
-            await creatematch()
-                //  console.log('connection closed')
-                //console.log('connection closed')
-        })
+        await creatematch()
+
     }
 }
 async function pendingmovie() {
