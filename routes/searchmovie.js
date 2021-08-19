@@ -3,6 +3,8 @@ var router = express.Router();
 var path = require('path')
 var mongodb = require('mongodb');
 var conn = require('../public/javascripts/connect.js');
+var nightupdate = require('../dailyUpdate')
+
 
 router.use((req, res, next) => {
 
@@ -94,29 +96,37 @@ router.get('/', async(req, res, next) => {
     let p = []
     if (name === "movie") {
         p = await getmovie(value)
+        res.send({ movie: p, auth: 1 })
         if (p.length == 0) {
             console.log("movie_not found")
-            await conn.collection("pendingmovies").insertOne({ name: value }, (err5, res5) => { console.log(res5) })
+            await conn.collection("pendingmovies").insertOne({ name: value }, (err5, res5) => { console.log(res5);
+                nightupdate() })
         }
     }
     if (name === "year") {
         p = await getYear(value)
+        res.send({ movie: p, auth: 1 })
     }
     if (name === "lang") {
         p = await getLang(value)
+        res.send({ movie: p, auth: 1 })
     }
     if (name === "actor") {
         p = await getActor(value)
+        res.send({ movie: p, auth: 1 })
     }
     if (name === "gener") {
         p = await getGener(value)
+        res.send({ movie: p, auth: 1 })
+
     }
     if (name === "director") {
         p = await getDirector(value)
+        res.send({ movie: p, auth: 1 })
     }
 
     console.log(p)
-    res.send({ movie: p, auth: 1 })
+
 })
 
 module.exports = router
