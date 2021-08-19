@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path')
+var fetch = require('node-fetch')
 var mongodb = require('mongodb');
 var conn = require('../public/javascripts/connect.js');
 var nightupdate = require('../dailyUpdate')
@@ -102,7 +103,7 @@ router.get('/', async(req, res, next) => {
             await conn.collection("pendingmovies").insertOne({ name: value }, (err5, res5) => {
                 console.log(res5);
                 fetch('https://spmovieserver.herokuapp.com')
-                //nightupdate()
+                    //nightupdate()
             })
         }
     }
