@@ -260,7 +260,7 @@ async function creatematch() {
         function sett() {
             if (p == h) {
                 console.log("connection closed");
-                client.close();
+                //client.close();
                 return;
             }
             // setTimeout(() => {
