@@ -259,7 +259,8 @@ async function creatematch() {
 
         function sett() {
             if (p == h) {
-                console.log("connection closed");
+
+                console.log("all movies updated and connection closed");
                 //client.close();
                 return;
             }
@@ -272,8 +273,8 @@ async function creatematch() {
                     }
                 }, { upsert: true },
                 (err, res) => {
-                    console.log(responsarr[p].movie_name + "updated")
-                        //console.log("hello")
+                    // console.log(responsarr[p].movie_name + "updated")
+                    //console.log("hello")
                     p++
                     sett()
                 })
