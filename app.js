@@ -12,19 +12,14 @@ var adminRouter = require('./routes/admin')
 var movieRouter = require('./routes/movie')
 var searchmovie = require('./routes/searchmovie')
 var cors = require('cors')
-var nightupdate = require('./dailyUpdate')
+//var nightupdate = require('./dailyUpdate')
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
-setInterval(() => {
-    // console.log(new Date().getHours(), new Date().getMinutes(), new Date().getSeconds())
-    if (new Date().getHours() === 19 && new Date().getMinutes() === 30 && new Date().getSeconds() === 50) {
-        nightupdate()
-    }
-}, 1000);
+
 
 var app = express();
 
-app.use(cors({ origin: ['https://example.com', 'https://stackoverflow.com', 'https://shubhamxpatel.github.io', 'http://localhost:3000'], credentials: true }))
+app.use(cors({ origin: ['https://example.com','https://priyanshumohan9849.github.io', 'https://stackoverflow.com', 'https://shubhamxpatel.github.io', 'http://localhost:3000'], credentials: true }))
 
 
 
