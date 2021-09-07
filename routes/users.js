@@ -68,7 +68,8 @@ async function fetch_user(id, response) {
                 res.auth = 1
                 delete res.pass
                 delete res._id
-                res.watchlist.splice(0, res.watchlist.length - 4)
+                    //res.watchlist.splice(0, res.watchlist.length - 4)
+                res.watchlist.reverse()
                 console.log(res.watchlist)
                 let movies = []
                 await fetchr(res.watchlist, 3, response, movies, res)
