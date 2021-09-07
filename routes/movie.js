@@ -129,7 +129,7 @@ router.get('/:name', async(req, response, next) => {
                     resr.watchlist.splice(4)
 
                     console.log(resr.movie_visited, resr.watchlist)
-                    await conn.collection("login").updateOne({ _id: mongodb.ObjectId(req.session.ID) }, { $set: { movie_visited: resr.movie_visited, watchlist: resr.watchlist } }, (err7, res7) => {
+                    await conn.collection("login").updateOne({ _id: mongodb.ObjectId(req.session.ID) }, { $set: { movie_visited: resr.watchlist, watchlist: resr.watchlist } }, (err7, res7) => {
                         console.log(err7, res7)
                         res.auth = 1
                         response.send(res);
