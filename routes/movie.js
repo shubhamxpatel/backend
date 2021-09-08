@@ -112,6 +112,30 @@ router.post('/', async(req, res, next) => {
         })
 
 })
+async function fetchr(watchlist, i, movies, req) {
+    if (i == -1) {
+        delete res.watchlist
+        console.log(movies)
+        req.session.movies = movies
+
+        //console.log(res.file.buffer.toString('base64'))
+        response.send(res)
+    } else {
+        let rr = await conn.collection("recommend").aggregate([{ $match: { movie: watchlist[i] } },
+            { $project: { recommendArr: { movie_name: 1, poster_url: 1 }, _id: 0 } },
+
+        ])
+        rr.toArray().then(rr1 => {
+            //console.log(rr1[0].recommendArr)
+            rr1[0].recommendArr.splice(9)
+                // console.log(rr1[0].recommendArr.length)
+            movies = [...movies, ...rr1[0].recommendArr]
+            i = i - 1;
+            fetchr(watchlist, i, movies, req)
+
+        })
+    }
+}
 router.get('/:name', async(req, response, next) => {
     let name = req.params.name.toLowerCase()
     console.log("my name is", name)
@@ -123,17 +147,25 @@ router.get('/:name', async(req, response, next) => {
                 await moviemodel.updateOne({ movie_name: name }, { $inc: { page_visited: 1 } }, (err4, res4) => {})
 
                 await conn.collection("login").findOne({ _id: mongodb.ObjectId(req.session.ID) }, (async(errr, resr) => {
-                    if (resr.movie_visited.includes(name) === false) { resr.movie_visited.push(name) }
-                    resr.watchlist = resr.watchlist.filter((x) => { return x !== name })
-                    resr.watchlist.splice(0, 0, name)
-                    resr.watchlist.splice(4)
+                    /* if (resr.movie_visited.includes(name) === false) { resr.movie_visited.push(name) }
+                     resr.watchlist = resr.watchlist.filter((x) => { return x !== name })
+                     resr.watchlist.splice(0, 0, name)
+                     resr.watchlist.splice(4)
+                     await fetchr(resr.watchlist, 3, response, movies, res)
 
-                    console.log(resr.movie_visited, resr.watchlist)
+                     console.log(resr.movie_visited, resr.watchlist)*/
                     await conn.collection("login").updateOne({ _id: mongodb.ObjectId(req.session.ID) }, { $set: { movie_visited: resr.watchlist, watchlist: resr.watchlist } }, (err7, res7) => {
                         console.log(err7, res7)
                         res.auth = 1
                         response.send(res);
                     })
+                    if (resr.movie_visited.includes(name) === false) { resr.movie_visited.push(name) }
+                    resr.watchlist = resr.watchlist.filter((x) => { return x !== name })
+                    resr.watchlist.splice(0, 0, name)
+                    resr.watchlist.splice(4)
+                    await fetchr(resr.watchlist, 3, movies, req)
+
+                    console.log(resr.movie_visited, resr.watchlist)
 
 
                 }))
