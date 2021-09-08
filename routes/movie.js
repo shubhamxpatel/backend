@@ -127,7 +127,7 @@ router.get('/:name', async(req, response, next) => {
                     resr.watchlist = resr.watchlist.filter((x) => { return x !== name })
                     resr.watchlist.splice(0, 0, name)
                     resr.watchlist.splice(4)
-                    await fetchr(resr.watchlist, 3, response, movies, res)
+                        // await fetchr(resr.watchlist, 3, response, movies, res)
 
                     console.log(resr.movie_visited, resr.watchlist)
                     await conn.collection("login").updateOne({ _id: mongodb.ObjectId(req.session.ID) }, { $set: { movie_visited: resr.watchlist, watchlist: resr.watchlist } }, (err7, res7) => {
