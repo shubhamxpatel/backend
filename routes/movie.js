@@ -115,7 +115,7 @@ router.post('/', async(req, res, next) => {
 async function fetchr(watchlist, i, movies, req) {
     if (i == -1) {
         delete res.watchlist
-        console.log(movies)
+        console.log(movies, req.session.cookie)
         req.session.movies = movies
 
         //console.log(res.file.buffer.toString('base64'))
